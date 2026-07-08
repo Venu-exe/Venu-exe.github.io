@@ -469,7 +469,223 @@ function changeTheme(themeName) {
     printLine(`[*] System color scheme configured: ${themeName.toUpperCase()}`, 'text-mute');
 }
 
-// Initializing Default Theme on Load
+// Initializing Default Theme and Database on Load
 document.addEventListener('DOMContentLoaded', () => {
     changeTheme('matrix');
+    
+    // Check auth status
+    const isAuthed = sessionStorage.getItem('cyber_auth');
+    if (isAuthed === 'true') {
+        const panel = document.getElementById('login-panel');
+        if (panel) panel.classList.add('hidden');
+    } else {
+        // Focus login key on start
+        setTimeout(() => {
+            const loginKey = document.getElementById('login-key');
+            if (loginKey) loginKey.focus();
+        }, 100);
+    }
+    
+    // Initialise Local DB
+    initDatabase();
 });
+
+// --- SIMULATED LOGIN MODULE ---
+function printLoginLog(text, type = '') {
+    const logsContainer = document.getElementById('login-logs');
+    if (!logsContainer) return;
+    const p = document.createElement('p');
+    if (type) p.className = type;
+    p.innerHTML = text;
+    logsContainer.appendChild(p);
+    logsContainer.scrollTop = logsContainer.scrollHeight;
+}
+
+function handleLoginAttempt() {
+    const userVal = document.getElementById('login-user').value.trim();
+    const keyVal = document.getElementById('login-key').value.trim();
+    const loginBtn = document.getElementById('login-btn');
+    const logsContainer = document.getElementById('login-logs');
+    
+    if (!logsContainer) return;
+    logsContainer.innerHTML = ''; // Clear logs
+    
+    printLoginLog('[*] Contacting authorization gateway...', 'text-mute');
+    
+    // Enforcing credentials for simulation (User: admin, Passkey: security)
+    if (userVal === 'admin' && keyVal === 'security') {
+        loginBtn.disabled = true;
+        
+        setTimeout(() => {
+            printLoginLog('[+] Credentials authenticated.', 'text-success');
+            printLoginLog('[*] Loading operational workspace key...', 'text-mute');
+        }, 600);
+        
+        setTimeout(() => {
+            printLoginLog('[*] Decrypting database hashes...', 'text-mute');
+            printLoginLog('[+] SHA-256 validation complete.', 'text-success');
+        }, 1400);
+        
+        setTimeout(() => {
+            printLoginLog('[*] Establishing encrypted tunnel...', 'text-mute');
+            printLoginLog('[+] Session active. Access Granted.', 'text-success');
+        }, 2200);
+        
+        setTimeout(() => {
+            // Store authorization status
+            sessionStorage.setItem('cyber_auth', 'true');
+            const panel = document.getElementById('login-panel');
+            if (panel) {
+                panel.classList.add('hidden');
+            }
+            
+            // Auto focus main terminal once logged in
+            const mainTermInput = document.getElementById('term-input');
+            if (mainTermInput) mainTermInput.focus();
+        }, 3000);
+        
+    } else {
+        setTimeout(() => {
+            printLoginLog('[!] ACCESS DENIED: Invalid key configuration.', 'text-error');
+        }, 800);
+    }
+}
+
+// Add enter key listener on login inputs
+document.getElementById('login-key')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        handleLoginAttempt();
+    }
+});
+
+
+// --- LOCALSTORAGE ASSETS DATABASE MODULE ---
+let localDatabase = [];
+
+function initDatabase() {
+    const rawData = localStorage.getItem('venu_assets');
+    if (rawData) {
+        localDatabase = JSON.parse(rawData);
+    } else {
+        // Seed default database targets
+        localDatabase = [
+            { ip: '192.168.1.1', scope: 'internal-gateway.local', status: 'safe' },
+            { ip: '10.0.0.5', scope: 'dev-database.internal', status: 'unscanned' },
+            { ip: '172.16.42.12', scope: 'api.target-scope.com', status: 'critical' }
+        ];
+        saveDatabase();
+    }
+    renderDatabase();
+}
+
+function saveDatabase() {
+    localStorage.setItem('venu_assets', JSON.stringify(localDatabase));
+}
+
+function renderDatabase() {
+    const tbody = document.getElementById('db-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    if (localDatabase.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center;" class="text-mute">Database is empty. Add a target asset.</td></tr>`;
+        return;
+    }
+    
+    localDatabase.forEach((target, index) => {
+        const tr = document.createElement('tr');
+        
+        // Status Badge Style
+        let badgeClass = 'unscanned';
+        let statusLabel = 'Unscanned';
+        if (target.status === 'safe') { badgeClass = 'safe'; statusLabel = 'Verified Safe'; }
+        else if (target.status === 'warning') { badgeClass = 'warning'; statusLabel = 'Low Severity'; }
+        else if (target.status === 'critical') { badgeClass = 'critical'; statusLabel = 'Critical Anomaly'; }
+        
+        tr.innerHTML = `
+            <td><span class="text-highlight">${target.ip}</span></td>
+            <td>${target.scope}</td>
+            <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+            <td>
+                <button class="inspect-btn" onclick="deleteDbTarget(${index})" style="padding: 0.2rem 0.5rem;"><i class="fa-solid fa-trash"></i> Delete</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function handleDbAdd(event) {
+    event.preventDefault();
+    const ip = document.getElementById('db-ip').value.trim();
+    const scope = document.getElementById('db-scope').value.trim();
+    const status = document.getElementById('db-status').value;
+    
+    localDatabase.push({ ip, scope, status });
+    saveDatabase();
+    renderDatabase();
+    
+    document.getElementById('db-target-form').reset();
+}
+
+function deleteDbTarget(index) {
+    localDatabase.splice(index, 1);
+    saveDatabase();
+    renderDatabase();
+}
+
+function clearDb() {
+    localDatabase = [];
+    saveDatabase();
+    renderDatabase();
+}
+
+function auditAllDbTargets() {
+    activateSection('terminal');
+    commands.clear();
+    
+    printLine('--- INITIALIZING AUDIT ON REGISTRY ASSETS ---', 'text-highlight');
+    
+    if (localDatabase.length === 0) {
+        printLine('[!] Error: No targets registered in database.', 'text-error');
+        return;
+    }
+    
+    printLine(`[*] Auditing ${localDatabase.length} asset entries...`, 'text-mute');
+    
+    let delay = 600;
+    localDatabase.forEach((target, index) => {
+        setTimeout(() => {
+            printLine(`[*] Auditing ${target.ip} (${target.scope})...`, 'text-mute');
+        }, delay);
+        
+        delay += 600;
+        
+        setTimeout(() => {
+            if (target.status === 'unscanned') {
+                // Randomly assign a new audited status
+                const rand = Math.random();
+                if (rand < 0.5) {
+                    target.status = 'safe';
+                    printLine(`[+] Audit complete on ${target.ip} -> Safe (No ports exposed)`, 'text-success');
+                } else if (rand < 0.8) {
+                    target.status = 'warning';
+                    printLine(`[!] Audit complete on ${target.ip} -> Warning (Exposed SMB/Telnet)`, 'text-error');
+                } else {
+                    target.status = 'critical';
+                    printLine(`[!] Audit complete on ${target.ip} -> Critical (Request Smuggling vuln)`, 'text-error');
+                }
+                saveDatabase();
+                renderDatabase();
+            } else {
+                printLine(`[*] Asset ${target.ip} is already verified as ${target.status.toUpperCase()}.`, 'text-mute');
+            }
+        }, delay);
+        
+        delay += 600;
+    });
+    
+    setTimeout(() => {
+        printLine('[+] Audit complete. Database updated.', 'text-success');
+    }, delay);
+}

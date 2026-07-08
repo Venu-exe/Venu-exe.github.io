@@ -14,6 +14,30 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="cyber-theme">
+    <!-- Login Screen Overlay -->
+    <div id="login-panel" class="cyber-login-overlay">
+        <div class="login-box glow-green">
+            <div class="login-header">
+                <i class="fa-solid fa-lock"></i> SYSTEM ACCESS PROTECTION
+            </div>
+            <div class="login-body">
+                <p class="login-hint">Authentication required. Establish encrypted operational context.</p>
+                <div class="form-group">
+                    <label for="login-user">> OPERATOR_ID</label>
+                    <input type="text" id="login-user" value="admin" autocomplete="off" spellcheck="false">
+                </div>
+                <div class="form-group">
+                    <label for="login-key">> ACCESS_PASSKEY</label>
+                    <input type="password" id="login-key" placeholder="••••••••" autocomplete="off">
+                </div>
+                <div id="login-logs" class="login-console-logs"></div>
+                <button onclick="handleLoginAttempt()" class="cyber-btn primary-btn glow-green-btn" id="login-btn">
+                    <span class="btn-text"><i class="fa-solid fa-key"></i> INITIATE DECRYPTION</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Matrix Rain Canvas Background -->
     <canvas id="matrix-canvas"></canvas>
 
@@ -31,6 +55,7 @@
             <a href="#arsenal" class="nav-link" id="nav-arsenal-btn"><i class="fa-solid fa-shield-halved"></i> Arsenal</a>
             <a href="#projects" class="nav-link" id="nav-projects-btn"><i class="fa-solid fa-laptop-code"></i> Projects</a>
             <a href="#timeline" class="nav-link" id="nav-timeline-btn"><i class="fa-solid fa-timeline"></i> Timeline</a>
+            <a href="#database" class="nav-link" id="nav-database-btn"><i class="fa-solid fa-database"></i> Database</a>
             <a href="#platforms" class="nav-link" id="nav-platforms-btn"><i class="fa-solid fa-bug"></i> Platforms</a>
             <a href="#contact" class="nav-link" id="nav-contact-btn"><i class="fa-solid fa-envelope"></i> Contact</a>
         </nav>
@@ -394,6 +419,64 @@
                         <h3 class="timeline-title">cybersecurity & Programming</h3>
                     </div>
                     <p class="timeline-desc">Began operational study in scripting languages (Python/Bash), networking protocols, and web application attack vectors.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Section -->
+        <section id="database" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-database"></i> Local Asset Registry</h2>
+            <div class="cyber-divider"></div>
+            <p class="timeline-desc" style="margin-bottom: 2rem;">Offline target database stored client-side in browser <code>localStorage</code> (updates persist on reload):</p>
+            
+            <div class="db-grid">
+                <!-- Add Target Form -->
+                <div class="db-form-container glow-green">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-plus"></i> Register New Host</h3>
+                    <form id="db-target-form" class="cyber-form" onsubmit="handleDbAdd(event)">
+                        <div class="form-group">
+                            <label for="db-ip">> HOST_IP / ADDRESS</label>
+                            <input type="text" id="db-ip" required placeholder="e.g. 192.168.1.100" pattern="^[a-zA-Z0-9\.-]+$">
+                        </div>
+                        <div class="form-group">
+                            <label for="db-scope">> ASSET_SCOPE</label>
+                            <input type="text" id="db-scope" required placeholder="e.g. internal-api.local">
+                        </div>
+                        <div class="form-group">
+                            <label for="db-status">> STATUS_CLASSIFICATION</label>
+                            <select id="db-status" class="theme-dropdown" style="background-color: rgba(2, 4, 8, 0.7); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 4px; color: var(--text-primary); outline: none; width: 100%;">
+                                <option value="unscanned">Unscanned</option>
+                                <option value="safe">Verified Safe</option>
+                                <option value="warning">Low Severity</option>
+                                <option value="critical">Critical Anomaly</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="cyber-btn primary-btn" style="width: 100%; justify-content: center; margin-top: 1rem;"><i class="fa-solid fa-plus"></i> ADD TARGET</button>
+                    </form>
+                </div>
+
+                <!-- Database Entries Table -->
+                <div class="db-table-container glow-cyan">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-table"></i> Registry Entries</h3>
+                    <div class="table-scroll">
+                        <table class="cyber-table">
+                            <thead>
+                                <tr>
+                                    <th>IP / HOST</th>
+                                    <th>SCOPE</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="db-tbody">
+                                <!-- Dynamic LocalStorage entries -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="db-actions-row">
+                        <button class="cyber-btn" onclick="clearDb()"><i class="fa-solid fa-trash"></i> WIPE STORAGE</button>
+                        <button class="cyber-btn primary-btn" onclick="auditAllDbTargets()"><i class="fa-solid fa-shield-halved"></i> AUDIT ALL</button>
+                    </div>
                 </div>
             </div>
         </section>
