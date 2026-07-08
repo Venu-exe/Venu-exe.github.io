@@ -1564,3 +1564,64 @@ body.amber-theme {
     }
 }
 
+/* Secure Client Portal Styling */
+.portal-info-bar {
+    background-color: rgba(11, 18, 31, 0.7);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.portal-role-view {
+    transition: all 0.3s ease;
+}
+
+.portal-role-view.hidden {
+    display: none;
+}
+
+.admin-dashboard-section {
+    background-color: rgba(2, 4, 8, 0.4);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 4px;
+}
+
+/* Auth Toggle */
+.auth-toggle a {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.auth-toggle a:hover {
+    color: var(--text-primary);
+}
+
+.inspect-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.inspect-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: var(--primary-glow);
+}
+

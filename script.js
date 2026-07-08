@@ -469,15 +469,19 @@ function changeTheme(themeName) {
     printLine(`[*] System color scheme configured: ${themeName.toUpperCase()}`, 'text-mute');
 }
 
-// Initializing Default Theme and Database on Load
+// Initializing Default Theme and Portal on Load
 document.addEventListener('DOMContentLoaded', () => {
     changeTheme('matrix');
+    
+    // Initialise Users and Requests Databases
+    initPortalDatabases();
     
     // Check auth status
     const isAuthed = sessionStorage.getItem('cyber_auth');
     if (isAuthed === 'true') {
         const panel = document.getElementById('login-panel');
         if (panel) panel.classList.add('hidden');
+        renderPortal();
     } else {
         // Focus login key on start
         setTimeout(() => {
@@ -486,11 +490,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
     
-    // Initialise Local DB
+    // Initialise Local DB for scanning sandbox targets
     initDatabase();
 });
 
-// --- SIMULATED LOGIN MODULE ---
+// --- MULTI-USER PORTAL GATEWAY ---
+let registeredUsers = [];
+let clientRequests = [];
+
+function initPortalDatabases() {
+    // 1. Initialise users list
+    const usersData = localStorage.getItem('venu_users');
+    if (usersData) {
+        registeredUsers = JSON.parse(usersData);
+    } else {
+        // Seed default accounts
+        registeredUsers = [
+            { username: 'admin', password: 'security', role: 'admin' },
+            { username: 'client', password: 'password', role: 'client' }
+        ];
+        localStorage.setItem('venu_users', JSON.stringify(registeredUsers));
+    }
+    
+    // 2. Initialise client requests list
+    const requestsData = localStorage.getItem('venu_requests');
+    if (requestsData) {
+        clientRequests = JSON.parse(requestsData);
+    } else {
+        // Seed default requests
+        clientRequests = [
+            { client: 'client', host: 'mystartup.io', service: 'Web Pentesting', status: 'unscanned', details: 'Web portal needs black-box vulnerability audit before launch.' },
+            { client: 'client', host: 'internal-api.dev', service: 'Bug Remediation', status: 'safe', details: 'Assisted in resolving CORS configuration issues.' }
+        ];
+        localStorage.setItem('venu_requests', JSON.stringify(clientRequests));
+    }
+}
+
+function toggleAuthView(e, viewName) {
+    if (e) e.preventDefault();
+    const loginView = document.getElementById('login-view');
+    const signupView = document.getElementById('signup-view');
+    const loginLogs = document.getElementById('login-logs');
+    const signupLogs = document.getElementById('signup-logs');
+    
+    if (loginLogs) loginLogs.innerHTML = '';
+    if (signupLogs) signupLogs.innerHTML = '';
+    
+    if (viewName === 'signup') {
+        loginView.classList.add('hidden');
+        signupView.classList.remove('hidden');
+        document.getElementById('signup-user')?.focus();
+    } else {
+        signupView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        document.getElementById('login-user')?.focus();
+    }
+}
+
 function printLoginLog(text, type = '') {
     const logsContainer = document.getElementById('login-logs');
     if (!logsContainer) return;
@@ -501,6 +557,67 @@ function printLoginLog(text, type = '') {
     logsContainer.scrollTop = logsContainer.scrollHeight;
 }
 
+function printSignupLog(text, type = '') {
+    const logsContainer = document.getElementById('signup-logs');
+    if (!logsContainer) return;
+    const p = document.createElement('p');
+    if (type) p.className = type;
+    p.innerHTML = text;
+    logsContainer.appendChild(p);
+    logsContainer.scrollTop = logsContainer.scrollHeight;
+}
+
+function handleRegisterAttempt() {
+    const userVal = document.getElementById('signup-user').value.trim();
+    const keyVal = document.getElementById('signup-key').value.trim();
+    const signupBtn = document.getElementById('signup-btn');
+    const logsContainer = document.getElementById('signup-logs');
+    
+    if (!logsContainer) return;
+    logsContainer.innerHTML = '';
+    
+    if (!userVal || !keyVal) {
+        printSignupLog('[!] Username and Password cannot be empty.', 'text-error');
+        return;
+    }
+    
+    // Check duplicate
+    const exists = registeredUsers.some(u => u.username.toLowerCase() === userVal.toLowerCase());
+    if (exists) {
+        printSignupLog('[!] ACCESS DENIED: Identity signature already registered.', 'text-error');
+        return;
+    }
+    
+    signupBtn.disabled = true;
+    printSignupLog('[*] Contacting identity register gateway...', 'text-mute');
+    
+    setTimeout(() => {
+        printSignupLog('[*] Writing client record to schema...', 'text-mute');
+        
+        // Save user
+        registeredUsers.push({ username: userVal, password: keyVal, role: 'client' });
+        localStorage.setItem('venu_users', JSON.stringify(registeredUsers));
+        
+        printSignupLog('[+] Client profile registered successfully.', 'text-success');
+    }, 800);
+    
+    setTimeout(() => {
+        printSignupLog('[*] System configured. Redirecting in 2s...', 'text-mute');
+    }, 1600);
+    
+    setTimeout(() => {
+        signupBtn.disabled = false;
+        document.getElementById('signup-user').value = '';
+        document.getElementById('signup-key').value = '';
+        
+        // Auto fill username in login form
+        const loginUser = document.getElementById('login-user');
+        if (loginUser) loginUser.value = userVal;
+        
+        toggleAuthView(null, 'login');
+    }, 3200);
+}
+
 function handleLoginAttempt() {
     const userVal = document.getElementById('login-user').value.trim();
     const keyVal = document.getElementById('login-key').value.trim();
@@ -508,36 +625,46 @@ function handleLoginAttempt() {
     const logsContainer = document.getElementById('login-logs');
     
     if (!logsContainer) return;
-    logsContainer.innerHTML = ''; // Clear logs
+    logsContainer.innerHTML = '';
     
-    printLoginLog('[*] Contacting authorization gateway...', 'text-mute');
+    printLoginLog('[*] Contacting gateway authentication node...', 'text-mute');
     
-    // Enforcing credentials for simulation (User: admin, Passkey: security)
-    if (userVal === 'admin' && keyVal === 'security') {
+    // Verify credentials
+    const matchedUser = registeredUsers.find(u => u.username.toLowerCase() === userVal.toLowerCase() && u.password === keyVal);
+    
+    if (matchedUser) {
         loginBtn.disabled = true;
         
         setTimeout(() => {
             printLoginLog('[+] Credentials authenticated.', 'text-success');
-            printLoginLog('[*] Loading operational workspace key...', 'text-mute');
+            printLoginLog(`[*] Loading operator context: ${matchedUser.role.toUpperCase()}`, 'text-mute');
         }, 600);
         
         setTimeout(() => {
-            printLoginLog('[*] Decrypting database hashes...', 'text-mute');
-            printLoginLog('[+] SHA-256 validation complete.', 'text-success');
+            printLoginLog('[*] Decrypting node database blocks...', 'text-mute');
+            printLoginLog('[+] Active node session established.', 'text-success');
         }, 1400);
         
         setTimeout(() => {
-            printLoginLog('[*] Establishing encrypted tunnel...', 'text-mute');
-            printLoginLog('[+] Session active. Access Granted.', 'text-success');
+            printLoginLog('[*] Mounting workspace frames...', 'text-mute');
+            printLoginLog('[+] Session initialized. Decryption Granted.', 'text-success');
         }, 2200);
         
         setTimeout(() => {
-            // Store authorization status
+            // Store session
             sessionStorage.setItem('cyber_auth', 'true');
+            sessionStorage.setItem('cyber_user', matchedUser.username);
+            sessionStorage.setItem('cyber_role', matchedUser.role);
+            
             const panel = document.getElementById('login-panel');
             if (panel) {
                 panel.classList.add('hidden');
             }
+            
+            loginBtn.disabled = false;
+            
+            // Render view layout based on role
+            renderPortal();
             
             // Auto focus main terminal once logged in
             const mainTermInput = document.getElementById('term-input');
@@ -546,9 +673,28 @@ function handleLoginAttempt() {
         
     } else {
         setTimeout(() => {
-            printLoginLog('[!] ACCESS DENIED: Invalid key configuration.', 'text-error');
+            printLoginLog('[!] ACCESS DENIED: Invalid key or ID parameters.', 'text-error');
         }, 800);
     }
+}
+
+function handleLogout() {
+    sessionStorage.removeItem('cyber_auth');
+    sessionStorage.removeItem('cyber_user');
+    sessionStorage.removeItem('cyber_role');
+    
+    const panel = document.getElementById('login-panel');
+    if (panel) {
+        panel.classList.remove('hidden');
+    }
+    
+    // Reset login forms
+    const loginUser = document.getElementById('login-user');
+    if (loginUser) loginUser.value = 'admin';
+    const loginKey = document.getElementById('login-key');
+    if (loginKey) loginKey.value = '';
+    
+    toggleAuthView(null, 'login');
 }
 
 // Add enter key listener on login inputs
@@ -557,6 +703,152 @@ document.getElementById('login-key')?.addEventListener('keydown', (e) => {
         handleLoginAttempt();
     }
 });
+
+// Add enter key listener on signup inputs
+document.getElementById('signup-key')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        handleRegisterAttempt();
+    }
+});
+
+// --- DYNAMIC MULTI-ROLE PORTAL RENDERER ---
+function renderPortal() {
+    const curUser = sessionStorage.getItem('cyber_user') || 'guest';
+    const curRole = sessionStorage.getItem('cyber_role') || 'client';
+    
+    const usernameEl = document.getElementById('portal-username');
+    const userroleEl = document.getElementById('portal-userrole');
+    const portalTitleEl = document.getElementById('portal-title');
+    
+    if (usernameEl) usernameEl.textContent = curUser;
+    if (userroleEl) {
+        userroleEl.textContent = curRole.toUpperCase();
+        userroleEl.className = `status-badge ${curRole === 'admin' ? 'critical' : 'safe'}`;
+    }
+    if (portalTitleEl) {
+        portalTitleEl.innerHTML = `<i class="fa-solid fa-server"></i> ${curRole === 'admin' ? 'Security Operations Command' : 'Client Security Portal'}`;
+    }
+    
+    const clientView = document.getElementById('client-portal-view');
+    const adminView = document.getElementById('admin-portal-view');
+    
+    if (curRole === 'admin') {
+        clientView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        renderAdminRequestsTable();
+        renderDatabase(); // render admin scanning targets
+    } else {
+        adminView.classList.add('hidden');
+        clientView.classList.remove('hidden');
+        renderClientRequestsTable(curUser);
+    }
+}
+
+// Client Side Table Rendering
+function renderClientRequestsTable(username) {
+    const tbody = document.getElementById('client-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    const myRequests = clientRequests.filter(r => r.client.toLowerCase() === username.toLowerCase());
+    
+    if (myRequests.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center;" class="text-mute">You have submitted no audit requests. Use the form on the left.</td></tr>`;
+        return;
+    }
+    
+    myRequests.forEach(req => {
+        const tr = document.createElement('tr');
+        
+        let badgeClass = 'unscanned';
+        let statusLabel = 'Pending Review';
+        if (req.status === 'safe') { badgeClass = 'safe'; statusLabel = 'Vulnerability Patched / Secure'; }
+        else if (req.status === 'warning') { badgeClass = 'warning'; statusLabel = 'Auditing Node'; }
+        else if (req.status === 'critical') { badgeClass = 'critical'; statusLabel = 'Vulnerability Found'; }
+        
+        tr.innerHTML = `
+            <td><span class="text-highlight">${req.host}</span></td>
+            <td>${req.service}</td>
+            <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+            <td><span style="font-size: 0.8rem; color: var(--text-secondary);">${req.details}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function handleClientRequestSubmit(e) {
+    e.preventDefault();
+    const host = document.getElementById('req-host').value.trim();
+    const service = document.getElementById('req-service').value;
+    const details = document.getElementById('req-details').value.trim();
+    const username = sessionStorage.getItem('cyber_user') || 'client';
+    
+    clientRequests.push({
+        client: username,
+        host: host,
+        service: service,
+        status: 'unscanned',
+        details: details
+    });
+    
+    localStorage.setItem('venu_requests', JSON.stringify(clientRequests));
+    renderPortal();
+    document.getElementById('client-request-form').reset();
+}
+
+// Admin Side Table Rendering
+function renderAdminRequestsTable() {
+    const tbody = document.getElementById('admin-requests-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    if (clientRequests.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center;" class="text-mute">No client requests in registry.</td></tr>`;
+        return;
+    }
+    
+    clientRequests.forEach((req, index) => {
+        const tr = document.createElement('tr');
+        
+        let badgeClass = 'unscanned';
+        let statusLabel = 'Pending Review';
+        if (req.status === 'safe') { badgeClass = 'safe'; statusLabel = 'Vulnerability Patched'; }
+        else if (req.status === 'warning') { badgeClass = 'warning'; statusLabel = 'Under Audit'; }
+        else if (req.status === 'critical') { badgeClass = 'critical'; statusLabel = 'Critical Anomaly'; }
+        
+        tr.innerHTML = `
+            <td><strong class="text-highlight">${req.client}</strong></td>
+            <td><code>${req.host}</code></td>
+            <td>${req.service}</td>
+            <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+            <td><span style="font-size: 0.8rem; color: var(--text-secondary);">${req.details}</span></td>
+            <td>
+                <div style="display:flex; gap:0.3rem;">
+                    <button class="inspect-btn" onclick="updateRequestStatus(${index}, 'warning')" style="padding: 0.2rem 0.4rem; font-size:0.75rem;"><i class="fa-solid fa-hourglass-start"></i> Audit</button>
+                    <button class="inspect-btn" onclick="updateRequestStatus(${index}, 'safe')" style="padding: 0.2rem 0.4rem; font-size:0.75rem; border-color:var(--neon-green); color:var(--neon-green);"><i class="fa-solid fa-check"></i> Patch</button>
+                    <button class="inspect-btn" onclick="deleteRequest(${index})" style="padding: 0.2rem 0.4rem; font-size:0.75rem; border-color:#ff5f56; color:#ff5f56;"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function updateRequestStatus(index, newStatus) {
+    if (clientRequests[index]) {
+        clientRequests[index].status = newStatus;
+        localStorage.setItem('venu_requests', JSON.stringify(clientRequests));
+        renderPortal();
+    }
+}
+
+function deleteRequest(index) {
+    clientRequests.splice(index, 1);
+    localStorage.setItem('venu_requests', JSON.stringify(clientRequests));
+    renderPortal();
+}
 
 
 // --- LOCALSTORAGE ASSETS DATABASE MODULE ---
