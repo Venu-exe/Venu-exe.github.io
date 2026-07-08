@@ -1326,3 +1326,217 @@ body.amber-theme {
     }
 }
 
+/* Floating Chatbot Widget (Roby) */
+.roby-chatbot {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+    font-family: 'Fira Code', monospace;
+}
+
+.roby-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #020408;
+    border: 1px solid var(--border-color-active);
+    color: var(--primary-color);
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), var(--primary-glow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.roby-toggle-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 25px var(--primary-color);
+}
+
+.roby-toggle-btn i {
+    transition: transform 0.5s ease;
+}
+
+.roby-toggle-btn:hover i {
+    transform: rotate(360deg);
+}
+
+/* Pulse Ring Animation */
+.pulse-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    opacity: 0;
+    pointer-events: none;
+    animation: roby-pulse 2s infinite;
+}
+
+@keyframes roby-pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Chat Window Box */
+.roby-chat-window {
+    position: absolute;
+    bottom: 75px;
+    right: 0;
+    width: 320px;
+    height: 400px;
+    background-color: rgba(6, 11, 19, 0.95);
+    border: 1px solid var(--border-color-active);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.8), var(--primary-glow);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.roby-chat-window.hidden {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.roby-header {
+    background-color: #0b121f;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.roby-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    box-shadow: var(--primary-glow);
+    display: inline-block;
+    animation: blink-anim 1.5s ease infinite;
+}
+
+.roby-title {
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-shadow: var(--primary-glow);
+    flex-grow: 1;
+    margin-left: 0.5rem;
+}
+
+.roby-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+}
+
+.roby-close-btn:hover {
+    color: #ff5f56;
+}
+
+.roby-messages-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    background-color: rgba(2, 4, 8, 0.4);
+}
+
+.roby-msg {
+    display: flex;
+    width: 100%;
+}
+
+.roby-msg.bot-msg {
+    justify-content: flex-start;
+}
+
+.roby-msg.user-msg {
+    justify-content: flex-end;
+}
+
+.msg-bubble {
+    max-width: 85%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.bot-msg .msg-bubble {
+    background-color: rgba(2, 4, 8, 0.8);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-left: 3px solid var(--primary-color);
+}
+
+.user-msg .msg-bubble {
+    background-color: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    color: var(--neon-cyan);
+    border-right: 3px solid var(--neon-cyan);
+}
+
+.roby-input-area {
+    display: flex;
+    border-top: 1px solid var(--border-color);
+    background-color: #020408;
+}
+
+#roby-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    padding: 0.8rem;
+    caret-color: var(--primary-color);
+}
+
+.roby-send-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0 1rem;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.roby-send-btn:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+    .roby-chat-window {
+        width: calc(100vw - 50px);
+        right: 0;
+        bottom: 75px;
+    }
+}
+

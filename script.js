@@ -689,3 +689,96 @@ function auditAllDbTargets() {
         printLine('[+] Audit complete. Database updated.', 'text-success');
     }, delay);
 }
+
+// --- ROBY CHATBOT WIDGET CORE ---
+function toggleRoby() {
+    const windowEl = document.getElementById('roby-window');
+    if (!windowEl) return;
+    
+    windowEl.classList.toggle('hidden');
+    
+    // Focus chat input on open
+    if (!windowEl.classList.contains('hidden')) {
+        setTimeout(() => {
+            const robyInput = document.getElementById('roby-input');
+            if (robyInput) robyInput.focus();
+        }, 100);
+    }
+}
+
+function appendRobyMessage(text, isUser = false) {
+    const messagesArea = document.getElementById('roby-messages');
+    if (!messagesArea) return;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `roby-msg ${isUser ? 'user-msg' : 'bot-msg'}`;
+    
+    msgDiv.innerHTML = `<div class="msg-bubble">${text}</div>`;
+    messagesArea.appendChild(msgDiv);
+    
+    // Scroll to bottom
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+}
+
+const robyJokes = [
+    "Why do programmers prefer dark mode? Because light attracts bugs!",
+    "How many hackers does it take to change a lightbulb? None, they just exploit the dark!",
+    "Why did the security analyst cross the road? To alert the other side!",
+    "Why do computer security guys hate cold rooms? Because of all the Windows updates!",
+    "What is a hacker's favorite season? Phishing season!",
+    "There are 10 types of people: those who understand binary, and those who don't."
+];
+
+function getRobyResponse(input) {
+    const query = input.toLowerCase();
+    
+    if (query.includes('project') || query.includes('tool') || query.includes('repo') || query.includes('github')) {
+        return "Venu has built several security utilities. Pinned works: <code>ssh-bruteforce</code>, <code>Portscanner</code>, <code>keylogger</code>, and <code>full-recon</code>. Check the **Projects** tab or type <span class='text-highlight'>projects</span> in the terminal!";
+    }
+    
+    if (query.includes('hackerone') || query.includes('bugcrowd') || query.includes('bounty') || query.includes('hunting')) {
+        return "Venu-exe conducts security research on HackerOne (handle: <code>venu-sh</code>) and Bugcrowd (<code>venu-sh</code>). Venu specializes in Web Application Security audits and responsible disclosure.";
+    }
+    
+    if (query.includes('password') || query.includes('login') || query.includes('passkey') || query.includes('cred')) {
+        return "Decryption key accessed! Username: <span class='text-success'>admin</span>, Password/Passkey: <span class='text-success'>security</span>. Use these to access the main system dashboard.";
+    }
+    
+    if (query.includes('who are you') || query.includes('name') || query.includes('what is roby') || query.includes('roby')) {
+        return "I am Roby, a custom diagnostic helper bot built by Venu-exe to assist operators navigating this cybersecurity portfolio.";
+    }
+    
+    if (query.includes('joke') || query.includes('funny') || query.includes('laugh')) {
+        const randIndex = Math.floor(Math.random() * robyJokes.length);
+        return `🤖 [Cyber_Joke_Module]: "${robyJokes[randIndex]}"`;
+    }
+    
+    if (query.includes('help') || query.includes('command') || query.includes('terminal')) {
+        return "For system commands, open the **Terminal** tab and type <span class='text-highlight'>help</span>. You can run modules like <span class='text-highlight'>scan</span> or <span class='text-highlight'>exploit</span>!";
+    }
+    
+    if (query.includes('vuln') || query.includes('xss') || query.includes('security')) {
+        return "Securing inputs is key! For DOM updates, always prefer <code>textContent</code> over <code>innerHTML</code> to prevent client-side script injection anomalies.";
+    }
+    
+    return "Status: Nominal. I've logged your query in the secure sandbox. Ask me about Venu's projects, credentials, platforms, or type 'joke'!";
+}
+
+function handleRobySubmit(event) {
+    event.preventDefault();
+    const inputEl = document.getElementById('roby-input');
+    if (!inputEl) return;
+    
+    const queryText = inputEl.value.trim();
+    if (!queryText) return;
+    
+    // Append User Message
+    appendRobyMessage(queryText, true);
+    inputEl.value = '';
+    
+    // Typing simulation response
+    setTimeout(() => {
+        const reply = getRobyResponse(queryText);
+        appendRobyMessage(reply, false);
+    }, 600);
+}

@@ -522,6 +522,34 @@
         <p class="copyright">&copy; 2026 Venu-exe. All rights reserved. Powered by digital stealth.</p>
     </footer>
 
+    <!-- Floating Chatbot Widget (Roby) -->
+    <div id="roby-widget" class="roby-chatbot">
+        <!-- Floating Toggle Button -->
+        <button id="roby-toggle" class="roby-toggle-btn" onclick="toggleRoby()">
+            <i class="fa-solid fa-robot"></i>
+            <span class="pulse-ring"></span>
+        </button>
+        <!-- Chat Window -->
+        <div id="roby-window" class="roby-chat-window hidden">
+            <div class="roby-header">
+                <span class="roby-status-dot"></span>
+                <span class="roby-title">Roby.exe [Helper Bot]</span>
+                <button class="roby-close-btn" onclick="toggleRoby()">&times;</button>
+            </div>
+            <div id="roby-messages" class="roby-messages-area">
+                <div class="roby-msg bot-msg">
+                    <div class="msg-bubble">
+                        Greetings, Operator. I am Roby, the security diagnostic bot. Ask me about Venu's projects, platforms, credentials, or ask for a cyber joke!
+                    </div>
+                </div>
+            </div>
+            <form id="roby-form" class="roby-input-area" onsubmit="handleRobySubmit(event)">
+                <input type="text" id="roby-input" placeholder="Query Roby..." autocomplete="off">
+                <button type="submit" class="roby-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+
     <!-- Interactive JS -->
     <script src="script.js"></script>
 </body>
