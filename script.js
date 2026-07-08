@@ -1118,6 +1118,34 @@ function appendRobyMessage(text, isUser = false) {
     messagesArea.scrollTop = messagesArea.scrollHeight;
 }
 
+function appendRobyTypingIndicator() {
+    const messagesArea = document.getElementById('roby-messages');
+    if (!messagesArea) return null;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `roby-msg bot-msg roby-typing-bubble`;
+    
+    msgDiv.innerHTML = `
+        <div class="msg-bubble" style="display:flex; align-items:center;">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    `;
+    messagesArea.appendChild(msgDiv);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+    return msgDiv;
+}
+
+function removeRobyTypingIndicator() {
+    const indicator = document.querySelector('.roby-typing-bubble');
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
 const robyJokes = [
     "Why do programmers prefer dark mode? Because light attracts bugs!",
     "How many hackers does it take to change a lightbulb? None, they just exploit the dark!",
@@ -1131,27 +1159,27 @@ function getRobyResponse(input) {
     const query = input.toLowerCase().trim();
     
     if (query.includes('project') || query.includes('tool') || query.includes('repo') || query.includes('github') || query.includes('code')) {
-        return "Venu's projects are focused on secure network communications and automated auditing. Check the **Projects** tab or type <span class='text-highlight'>projects</span> in the interactive terminal to view them.";
+        return "Oh, Venu has put together some really cool security tools! He displays an SSH bruteforcer, a fast port scanner, a keylogger, and an automated recon suite. If you check out the **Projects** tab, you can read all about them. You can also head over to the **Terminal** tab and type <code>projects</code> to run them right here in the sandbox!";
     }
     
     if (query.includes('hackerone') || query.includes('bugcrowd') || query.includes('bounty') || query.includes('hunting') || query.includes('profile')) {
-        return "Venu conducts security research on platforms like Bugcrowd and HackerOne under the handle <code>venu-sh</code>, specializing in vulnerability disclosure.";
+        return "Venu is pretty active doing security research on platforms like Bugcrowd and HackerOne under the handle <code>venu-sh</code>. He specializes in web application audits and is a big advocate for responsible disclosure. He keeps those profiles updated whenever he finds something new!";
     }
     
     if (query.includes('password') || query.includes('login') || query.includes('passkey') || query.includes('cred') || query.includes('admin')) {
-        return "Decryption key configuration: The default operator login is <span class='text-success'>admin@security.local</span> and the passkey is <span class='text-success'>security</span>. Clients can register their own email credentials using the Register form.";
+        return "Sure, I can help with that! The default login credentials for the admin dashboard are <span class='text-success'>admin@security.local</span> and the password is <span class='text-success'>security</span>. But if you are a client looking to submit an audit, just click 'Register' at the bottom of the login form to create your own account using your email.";
     }
     
     if (query.includes('audit') || query.includes('request') || query.includes('service') || query.includes('domain') || query.includes('help')) {
-        return "If you are a client looking to get your site audited, navigate to the **Portal** tab, register your account using your email address, and submit your domain for review.";
+        return "If you want Venu to look at your site for security issues, it is super easy! Just head to the **Portal** tab, register a client account with your email, and submit your domain scope. Venu will get notified, add it to his operational queue, and help you patch the bugs.";
     }
     
     if (query.includes('joke') || query.includes('funny') || query.includes('laugh')) {
         const randIndex = Math.floor(Math.random() * robyJokes.length);
-        return `🤖 [Cyber_Joke_Module]: "${robyJokes[randIndex]}"`;
+        return `Haha, okay, I love this one: "${robyJokes[randIndex]}" Pretty good, right? 🤖`;
     }
     
-    return "Status: Operational. I can only assist you with Venu's projects, security profiles, account credentials, or audit request guidelines. Please enter a relevant query.";
+    return "Hmm, I'm not really sure about that one. I am only set up to help you with Venu's projects, security profiles, account credentials, or setting up portal audit requests. Let's stick to those! What would you like to know?";
 }
 
 function handleRobySubmit(event) {
@@ -1166,9 +1194,15 @@ function handleRobySubmit(event) {
     appendRobyMessage(queryText, true);
     inputEl.value = '';
     
-    // Typing simulation response
+    // Add typing indicator
+    appendRobyTypingIndicator();
+    
+    // Simulated human typing/thinking delay
+    const typingDelay = 1000 + Math.random() * 800; // 1 to 1.8 seconds random delay
+    
     setTimeout(() => {
+        removeRobyTypingIndicator();
         const reply = getRobyResponse(queryText);
         appendRobyMessage(reply, false);
-    }, 600);
+    }, typingDelay);
 }

@@ -1616,3 +1616,37 @@ body.amber-theme {
     box-shadow: var(--primary-glow);
 }
 
+/* Chatbot Typing Indicator Animation */
+.typing-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    padding: 0.2rem 0;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: inline-block;
+    animation: roby-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes roby-bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+
