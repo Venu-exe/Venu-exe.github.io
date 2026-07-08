@@ -688,6 +688,21 @@ function handleLogout() {
         panel.classList.remove('hidden');
     }
     
+    const infoBar = document.getElementById('portal-info-bar');
+    if (infoBar) {
+        infoBar.classList.add('hidden');
+    }
+    
+    const clientView = document.getElementById('client-portal-view');
+    const adminView = document.getElementById('admin-portal-view');
+    if (clientView) clientView.classList.add('hidden');
+    if (adminView) adminView.classList.add('hidden');
+    
+    const portalTitle = document.getElementById('portal-title');
+    if (portalTitle) {
+        portalTitle.innerHTML = `<i class="fa-solid fa-server"></i> Portal Gateway`;
+    }
+    
     // Reset login forms
     const loginUser = document.getElementById('login-user');
     if (loginUser) loginUser.value = 'admin';
@@ -719,11 +734,15 @@ function renderPortal() {
     const usernameEl = document.getElementById('portal-username');
     const userroleEl = document.getElementById('portal-userrole');
     const portalTitleEl = document.getElementById('portal-title');
+    const infoBarEl = document.getElementById('portal-info-bar');
     
     if (usernameEl) usernameEl.textContent = curUser;
     if (userroleEl) {
         userroleEl.textContent = curRole.toUpperCase();
         userroleEl.className = `status-badge ${curRole === 'admin' ? 'critical' : 'safe'}`;
+    }
+    if (infoBarEl) {
+        infoBarEl.classList.remove('hidden');
     }
     if (portalTitleEl) {
         portalTitleEl.innerHTML = `<i class="fa-solid fa-server"></i> ${curRole === 'admin' ? 'Security Operations Command' : 'Client Security Portal'}`;

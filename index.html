@@ -14,50 +14,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="cyber-theme">
-    <!-- Login Screen Overlay -->
-    <div id="login-panel" class="cyber-login-overlay">
-        <div class="login-box glow-green">
-            <div class="login-header">
-                <i class="fa-solid fa-shield-halved"></i> SECURE PORTAL GATEWAY
-            </div>
-            
-            <!-- Login View -->
-            <div class="login-body" id="login-view">
-                <p class="login-hint">Establish encrypted operational context.</p>
-                <div class="form-group">
-                    <label for="login-user">> OPERATOR_ID</label>
-                    <input type="text" id="login-user" value="admin" autocomplete="off" spellcheck="false">
-                </div>
-                <div class="form-group">
-                    <label for="login-key">> ACCESS_PASSKEY</label>
-                    <input type="password" id="login-key" placeholder="••••••••" autocomplete="off">
-                </div>
-                <div id="login-logs" class="login-console-logs"></div>
-                <button onclick="handleLoginAttempt()" class="cyber-btn primary-btn" id="login-btn" style="width:100%; justify-content:center; margin-top:0.5rem;">
-                    <span class="btn-text"><i class="fa-solid fa-key"></i> DECRYPT PORTAL</span>
-                </button>
-                <p class="auth-toggle" style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: var(--text-secondary);">First time? <a href="#" onclick="toggleAuthView(event, 'signup')" style="color: var(--primary-color);">Register Client Account</a></p>
-            </div>
-
-            <!-- Sign Up View -->
-            <div class="login-body hidden" id="signup-view">
-                <p class="login-hint">Register client identity in secure database.</p>
-                <div class="form-group">
-                    <label for="signup-user">> CREATE_USERNAME</label>
-                    <input type="text" id="signup-user" placeholder="Enter username" autocomplete="off" spellcheck="false">
-                </div>
-                <div class="form-group">
-                    <label for="signup-key">> CREATE_PASSWORD</label>
-                    <input type="password" id="signup-key" placeholder="••••••••" autocomplete="off">
-                </div>
-                <div id="signup-logs" class="login-console-logs"></div>
-                <button onclick="handleRegisterAttempt()" class="cyber-btn primary-btn" id="signup-btn" style="width:100%; justify-content:center; margin-top:0.5rem;">
-                    <span class="btn-text"><i class="fa-solid fa-user-plus"></i> REGISTER IDENTITY</span>
-                </button>
-                <p class="auth-toggle" style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: var(--text-secondary);">Already registered? <a href="#" onclick="toggleAuthView(event, 'login')" style="color: var(--primary-color);">Return to Gateway</a></p>
-            </div>
-        </div>
-    </div>
 
     <!-- Matrix Rain Canvas Background -->
     <canvas id="matrix-canvas"></canvas>
@@ -445,13 +401,58 @@
                     </div>
                     <p class="timeline-desc">Began operational study in scripting languages (Python/Bash), networking protocols, and web application attack vectors.</p>
                 </div>
-               <!-- Database Section -->
+        <!-- Database Section -->
         <section id="database" class="section-card">
             <h2 class="section-title" id="portal-title"><i class="fa-solid fa-server"></i> Portal Gateway</h2>
             <div class="cyber-divider"></div>
             
+            <!-- Login Panel (renders inline inside Portal section when not logged in) -->
+            <div id="login-panel" class="cyber-login-overlay" style="margin: 2rem 0;">
+                <div class="login-box glow-green">
+                    <div class="login-header">
+                        <i class="fa-solid fa-shield-halved"></i> SECURE PORTAL GATEWAY
+                    </div>
+                    
+                    <!-- Login View -->
+                    <div class="login-body" id="login-view">
+                        <p class="login-hint">Establish encrypted operational context.</p>
+                        <div class="form-group">
+                            <label for="login-user">> OPERATOR_ID</label>
+                            <input type="text" id="login-user" value="admin" autocomplete="off" spellcheck="false">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-key">> ACCESS_PASSKEY</label>
+                            <input type="password" id="login-key" placeholder="••••••••" autocomplete="off">
+                        </div>
+                        <div id="login-logs" class="login-console-logs"></div>
+                        <button onclick="handleLoginAttempt()" class="cyber-btn primary-btn" id="login-btn" style="width:100%; justify-content:center; margin-top:0.5rem;">
+                            <span class="btn-text"><i class="fa-solid fa-key"></i> DECRYPT PORTAL</span>
+                        </button>
+                        <p class="auth-toggle" style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: var(--text-secondary);">First time? <a href="#" onclick="toggleAuthView(event, 'signup')" style="color: var(--primary-color);">Register Client Account</a></p>
+                    </div>
+
+                    <!-- Sign Up View -->
+                    <div class="login-body hidden" id="signup-view">
+                        <p class="login-hint">Register client identity in secure database.</p>
+                        <div class="form-group">
+                            <label for="signup-user">> CREATE_USERNAME</label>
+                            <input type="text" id="signup-user" placeholder="Enter username" autocomplete="off" spellcheck="false">
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-key">> CREATE_PASSWORD</label>
+                            <input type="password" id="signup-key" placeholder="••••••••" autocomplete="off">
+                        </div>
+                        <div id="signup-logs" class="login-console-logs"></div>
+                        <button onclick="handleRegisterAttempt()" class="cyber-btn primary-btn" id="signup-btn" style="width:100%; justify-content:center; margin-top:0.5rem;">
+                            <span class="btn-text"><i class="fa-solid fa-user-plus"></i> REGISTER IDENTITY</span>
+                        </button>
+                        <p class="auth-toggle" style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: var(--text-secondary);">Already registered? <a href="#" onclick="toggleAuthView(event, 'login')" style="color: var(--primary-color);">Return to Gateway</a></p>
+                    </div>
+                </div>
+            </div>
+
             <!-- User Welcome Info Bar -->
-            <div class="portal-info-bar">
+            <div class="portal-info-bar hidden" id="portal-info-bar">
                 <span class="info-user"><i class="fa-solid fa-user-secret"></i> Operator: <strong id="portal-username" class="text-success">guest</strong></span>
                 <span class="info-role"><i class="fa-solid fa-shield-halved"></i> Privilege: <span id="portal-userrole" class="status-badge unscanned">Guest</span></span>
                 <button class="inspect-btn" onclick="handleLogout()" style="padding: 0.2rem 0.5rem; display: inline-flex; align-items: center; gap: 0.3rem;"><i class="fa-solid fa-right-from-bracket"></i> Disconnect</button>
