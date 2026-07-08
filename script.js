@@ -55,11 +55,13 @@ for (let i = 0; i < columns; i++) {
     drops[i] = 1;
 }
 
+let matrixColor = '#00ff66';
+
 function drawMatrix() {
     ctx.fillStyle = 'rgba(5, 8, 12, 0.04)';
     ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#00ff66';
+    ctx.fillStyle = matrixColor;
     ctx.font = fontSize + 'px "Share Tech Mono", monospace';
 
     for (let i = 0; i < drops.length; i++) {
@@ -458,6 +460,11 @@ function changeTheme(themeName) {
     if (themeSelect) {
         themeSelect.value = themeName;
     }
+    
+    // Read style variables safely after CSS updates
+    setTimeout(() => {
+        matrixColor = getComputedStyle(document.body).getPropertyValue('--primary-color').trim() || '#00ff66';
+    }, 50);
     
     printLine(`[*] System color scheme configured: ${themeName.toUpperCase()}`, 'text-mute');
 }
