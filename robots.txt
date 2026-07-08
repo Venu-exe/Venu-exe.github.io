@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Disallow: /config/
+Disallow: /api/
+Disallow: /db/
+
+# Venu-exe portfolio - Security Audit Target Simulation.
+# Responsible Disclosure Policy: https://venu-exe.github.io/#contact
