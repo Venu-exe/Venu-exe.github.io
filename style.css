@@ -156,7 +156,7 @@ body {
 /* HUD Stats */
 .hud-stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
 }
@@ -505,7 +505,7 @@ body {
 /* Threat Arsenal / Skills */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
@@ -573,7 +573,7 @@ body {
 /* Projects Grid */
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
@@ -586,7 +586,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.3s ease;
-    height: 280px;
+    min-height: 320px;
 }
 
 .project-card.glow-green:hover { border-color: var(--neon-green); box-shadow: var(--glow-green); transform: translateY(-5px); }
@@ -690,7 +690,7 @@ body {
 
 .platforms-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
 }
 
