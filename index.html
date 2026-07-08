@@ -46,27 +46,31 @@
 
     <!-- Main Navigation -->
     <header class="cyber-header">
-        <div class="logo">
-            <span class="prompt-prefix">venu@security:~#</span> <span class="logo-text">Venu-exe</span><span class="cursor">_</span>
+        <div class="header-top-row">
+            <div class="logo">
+                <span class="prompt-prefix">venu@security:~#</span> <span class="logo-text">Venu-exe</span><span class="cursor">_</span>
+            </div>
+            <div class="theme-control">
+                <i class="fa-solid fa-palette icon-green"></i>
+                <select id="theme-select" class="theme-dropdown" onchange="changeTheme(this.value)">
+                    <option value="matrix">Matrix Green</option>
+                    <option value="cyberpunk">Cyberpunk Purple</option>
+                    <option value="glacier">Glacier Blue</option>
+                    <option value="amber">Amber Alert</option>
+                </select>
+            </div>
         </div>
-        <nav class="cyber-nav">
-            <a href="#about" class="nav-link active" id="nav-about-btn"><i class="fa-solid fa-user-secret"></i> Profile</a>
-            <a href="#terminal" class="nav-link" id="nav-terminal-btn"><i class="fa-solid fa-terminal"></i> Terminal</a>
-            <a href="#arsenal" class="nav-link" id="nav-arsenal-btn"><i class="fa-solid fa-shield-halved"></i> Arsenal</a>
-            <a href="#projects" class="nav-link" id="nav-projects-btn"><i class="fa-solid fa-laptop-code"></i> Projects</a>
-            <a href="#timeline" class="nav-link" id="nav-timeline-btn"><i class="fa-solid fa-timeline"></i> Timeline</a>
-            <a href="#database" class="nav-link" id="nav-database-btn"><i class="fa-solid fa-database"></i> Database</a>
-            <a href="#platforms" class="nav-link" id="nav-platforms-btn"><i class="fa-solid fa-bug"></i> Platforms</a>
-            <a href="#contact" class="nav-link" id="nav-contact-btn"><i class="fa-solid fa-envelope"></i> Contact</a>
-        </nav>
-        <div class="theme-control">
-            <i class="fa-solid fa-palette icon-green"></i>
-            <select id="theme-select" class="theme-dropdown" onchange="changeTheme(this.value)">
-                <option value="matrix">Matrix Green</option>
-                <option value="cyberpunk">Cyberpunk Purple</option>
-                <option value="glacier">Glacier Blue</option>
-                <option value="amber">Amber Alert</option>
-            </select>
+        <div class="header-nav-row">
+            <nav class="cyber-nav">
+                <a href="#about" class="nav-link active" id="nav-about-btn"><i class="fa-solid fa-user-secret"></i> Profile</a>
+                <a href="#terminal" class="nav-link" id="nav-terminal-btn"><i class="fa-solid fa-terminal"></i> Terminal</a>
+                <a href="#arsenal" class="nav-link" id="nav-arsenal-btn"><i class="fa-solid fa-shield-halved"></i> Arsenal</a>
+                <a href="#projects" class="nav-link" id="nav-projects-btn"><i class="fa-solid fa-laptop-code"></i> Projects</a>
+                <a href="#timeline" class="nav-link" id="nav-timeline-btn"><i class="fa-solid fa-timeline"></i> Timeline</a>
+                <a href="#database" class="nav-link" id="nav-database-btn"><i class="fa-solid fa-database"></i> Database</a>
+                <a href="#platforms" class="nav-link" id="nav-platforms-btn"><i class="fa-solid fa-bug"></i> Platforms</a>
+                <a href="#contact" class="nav-link" id="nav-contact-btn"><i class="fa-solid fa-envelope"></i> Contact</a>
+            </nav>
         </div>
     </header>
 
