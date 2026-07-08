@@ -504,10 +504,10 @@ function initPortalDatabases() {
     if (usersData) {
         registeredUsers = JSON.parse(usersData);
     } else {
-        // Seed default accounts
+        // Seed default accounts using emails as usernames
         registeredUsers = [
-            { username: 'admin', password: 'security', role: 'admin' },
-            { username: 'client', password: 'password', role: 'client' }
+            { username: 'admin@security.local', password: 'security', role: 'admin' },
+            { username: 'client@domain.com', password: 'Password123!', role: 'client' }
         ];
         localStorage.setItem('venu_users', JSON.stringify(registeredUsers));
     }
@@ -519,8 +519,8 @@ function initPortalDatabases() {
     } else {
         // Seed default requests
         clientRequests = [
-            { client: 'client', host: 'mystartup.io', service: 'Web Pentesting', status: 'unscanned', details: 'Web portal needs black-box vulnerability audit before launch.' },
-            { client: 'client', host: 'internal-api.dev', service: 'Bug Remediation', status: 'safe', details: 'Assisted in resolving CORS configuration issues.' }
+            { client: 'client@domain.com', host: 'mystartup.io', service: 'Web Pentesting', status: 'unscanned', details: 'Web portal needs black-box vulnerability audit before launch.' },
+            { client: 'client@domain.com', host: 'internal-api.dev', service: 'Bug Remediation', status: 'safe', details: 'Assisted in resolving CORS configuration issues.' }
         ];
         localStorage.setItem('venu_requests', JSON.stringify(clientRequests));
     }
@@ -581,10 +581,33 @@ function handleRegisterAttempt() {
         return;
     }
     
+    // 1. Email Format Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userVal)) {
+        printSignupLog('[!] REGISTRATION FAILED:', 'text-error');
+        printSignupLog(' -> Client ID must be a valid email format.', 'text-error');
+        printSignupLog(' -> Example: name@domain.com', 'text-mute');
+        return;
+    }
+    
+    // 2. Strong Password Validation (Min 8 chars, Upper, Lower, Number)
+    const hasUpper = /[A-Z]/.test(keyVal);
+    const hasLower = /[a-z]/.test(keyVal);
+    const hasDigit = /\d/.test(keyVal);
+    
+    if (keyVal.length < 8 || !hasUpper || !hasLower || !hasDigit) {
+        printSignupLog('[!] REGISTRATION FAILED: Weak password.', 'text-error');
+        if (keyVal.length < 8) printSignupLog(' -> Minimum 8 characters required.', 'text-error');
+        if (!hasUpper) printSignupLog(' -> Must include an uppercase letter (A-Z).', 'text-error');
+        if (!hasLower) printSignupLog(' -> Must include a lowercase letter (a-z).', 'text-error');
+        if (!hasDigit) printSignupLog(' -> Must include a numeric digit (0-9).', 'text-error');
+        return;
+    }
+    
     // Check duplicate
     const exists = registeredUsers.some(u => u.username.toLowerCase() === userVal.toLowerCase());
     if (exists) {
-        printSignupLog('[!] ACCESS DENIED: Identity signature already registered.', 'text-error');
+        printSignupLog('[!] ACCESS DENIED: Email signature already registered.', 'text-error');
         return;
     }
     
@@ -1041,22 +1064,22 @@ const robyJokes = [
 ];
 
 function getRobyResponse(input) {
-    const query = input.toLowerCase();
+    const query = input.toLowerCase().trim();
     
-    if (query.includes('project') || query.includes('tool') || query.includes('repo') || query.includes('github')) {
-        return "Venu has built several security utilities. Pinned works: <code>ssh-bruteforce</code>, <code>Portscanner</code>, <code>keylogger</code>, and <code>full-recon</code>. Check the **Projects** tab or type <span class='text-highlight'>projects</span> in the terminal!";
+    if (query.includes('project') || query.includes('tool') || query.includes('repo') || query.includes('github') || query.includes('code')) {
+        return "Venu's projects are focused on secure network communications and automated auditing. Check the **Projects** tab or type <span class='text-highlight'>projects</span> in the interactive terminal to view them.";
     }
     
-    if (query.includes('hackerone') || query.includes('bugcrowd') || query.includes('bounty') || query.includes('hunting')) {
-        return "Venu-exe conducts security research on HackerOne (handle: <code>venu-sh</code>) and Bugcrowd (<code>venu-sh</code>). Venu specializes in Web Application Security audits and responsible disclosure.";
+    if (query.includes('hackerone') || query.includes('bugcrowd') || query.includes('bounty') || query.includes('hunting') || query.includes('profile')) {
+        return "Venu conducts security research on platforms like Bugcrowd and HackerOne under the handle <code>venu-sh</code>, specializing in vulnerability disclosure.";
     }
     
-    if (query.includes('password') || query.includes('login') || query.includes('passkey') || query.includes('cred')) {
-        return "Decryption key accessed! Username: <span class='text-success'>admin</span>, Password/Passkey: <span class='text-success'>security</span>. Use these to access the main system dashboard.";
+    if (query.includes('password') || query.includes('login') || query.includes('passkey') || query.includes('cred') || query.includes('admin')) {
+        return "Decryption key configuration: The default operator login is <span class='text-success'>admin@security.local</span> and the passkey is <span class='text-success'>security</span>. Clients can register their own email credentials using the Register form.";
     }
     
-    if (query.includes('who are you') || query.includes('name') || query.includes('what is roby') || query.includes('roby')) {
-        return "I am Roby, a custom diagnostic helper bot built by Venu-exe to assist operators navigating this cybersecurity portfolio.";
+    if (query.includes('audit') || query.includes('request') || query.includes('service') || query.includes('domain') || query.includes('help')) {
+        return "If you are a client looking to get your site audited, navigate to the **Portal** tab, register your account using your email address, and submit your domain for review.";
     }
     
     if (query.includes('joke') || query.includes('funny') || query.includes('laugh')) {
@@ -1064,15 +1087,7 @@ function getRobyResponse(input) {
         return `🤖 [Cyber_Joke_Module]: "${robyJokes[randIndex]}"`;
     }
     
-    if (query.includes('help') || query.includes('command') || query.includes('terminal')) {
-        return "For system commands, open the **Terminal** tab and type <span class='text-highlight'>help</span>. You can run modules like <span class='text-highlight'>scan</span> or <span class='text-highlight'>exploit</span>!";
-    }
-    
-    if (query.includes('vuln') || query.includes('xss') || query.includes('security')) {
-        return "Securing inputs is key! For DOM updates, always prefer <code>textContent</code> over <code>innerHTML</code> to prevent client-side script injection anomalies.";
-    }
-    
-    return "Status: Nominal. I've logged your query in the secure sandbox. Ask me about Venu's projects, credentials, platforms, or type 'joke'!";
+    return "Status: Operational. I can only assist you with Venu's projects, security profiles, account credentials, or audit request guidelines. Please enter a relevant query.";
 }
 
 function handleRobySubmit(event) {

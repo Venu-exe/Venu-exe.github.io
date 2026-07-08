@@ -417,8 +417,8 @@
                     <div class="login-body" id="login-view">
                         <p class="login-hint">Establish encrypted operational context.</p>
                         <div class="form-group">
-                            <label for="login-user">> OPERATOR_ID</label>
-                            <input type="text" id="login-user" value="admin" autocomplete="off" spellcheck="false">
+                            <label for="login-user">> OPERATOR_EMAIL</label>
+                            <input type="email" id="login-user" value="admin@security.local" autocomplete="off" spellcheck="false">
                         </div>
                         <div class="form-group">
                             <label for="login-key">> ACCESS_PASSKEY</label>
@@ -433,14 +433,14 @@
 
                     <!-- Sign Up View -->
                     <div class="login-body hidden" id="signup-view">
-                        <p class="login-hint">Register client identity in secure database.</p>
+                        <p class="login-hint">Register client identity. User must be valid email address.</p>
                         <div class="form-group">
-                            <label for="signup-user">> CREATE_USERNAME</label>
-                            <input type="text" id="signup-user" placeholder="Enter username" autocomplete="off" spellcheck="false">
+                            <label for="signup-user">> CLIENT_EMAIL</label>
+                            <input type="email" id="signup-user" placeholder="operator@domain.com" autocomplete="off" spellcheck="false">
                         </div>
                         <div class="form-group">
-                            <label for="signup-key">> CREATE_PASSWORD</label>
-                            <input type="password" id="signup-key" placeholder="••••••••" autocomplete="off">
+                            <label for="signup-key">> STRONG_PASSWORD</label>
+                            <input type="password" id="signup-key" placeholder="Min. 8 characters (Upper/Lower/Number)" autocomplete="off">
                         </div>
                         <div id="signup-logs" class="login-console-logs"></div>
                         <button onclick="handleRegisterAttempt()" class="cyber-btn primary-btn" id="signup-btn" style="width:100%; justify-content:center; margin-top:0.5rem;">
