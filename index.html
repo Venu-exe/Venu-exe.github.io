@@ -30,9 +30,19 @@
             <a href="#terminal" class="nav-link" id="nav-terminal-btn"><i class="fa-solid fa-terminal"></i> Terminal</a>
             <a href="#arsenal" class="nav-link" id="nav-arsenal-btn"><i class="fa-solid fa-shield-halved"></i> Arsenal</a>
             <a href="#projects" class="nav-link" id="nav-projects-btn"><i class="fa-solid fa-laptop-code"></i> Projects</a>
+            <a href="#timeline" class="nav-link" id="nav-timeline-btn"><i class="fa-solid fa-timeline"></i> Timeline</a>
             <a href="#platforms" class="nav-link" id="nav-platforms-btn"><i class="fa-solid fa-bug"></i> Platforms</a>
             <a href="#contact" class="nav-link" id="nav-contact-btn"><i class="fa-solid fa-envelope"></i> Contact</a>
         </nav>
+        <div class="theme-control">
+            <i class="fa-solid fa-palette icon-green"></i>
+            <select id="theme-select" class="theme-dropdown" onchange="changeTheme(this.value)">
+                <option value="matrix">Matrix Green</option>
+                <option value="cyberpunk">Cyberpunk Purple</option>
+                <option value="glacier">Glacier Blue</option>
+                <option value="amber">Amber Alert</option>
+            </select>
+        </div>
     </header>
 
     <main class="cyber-container">
@@ -345,6 +355,46 @@
                     <p>Open source security utilities, bash scanning scripts, and automated recon tools.</p>
                     <span class="platform-status-badge"><span class="badge-dot"></span> Active</span>
                 </a>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-timeline"></i> Journey Timeline</h2>
+            <div class="cyber-divider"></div>
+            <div class="timeline-container">
+                <div class="timeline-item glow-green">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <span class="timeline-date">2026</span>
+                        <h3 class="timeline-title">Pushed Automated Recon Suite</h3>
+                    </div>
+                    <p class="timeline-desc">Integrated <code>full-recon</code>, combining passive subdomain lookups with active asset auditing into an optimized automated execution pipeline.</p>
+                </div>
+                <div class="timeline-item glow-cyan">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <span class="timeline-date">2025</span>
+                        <h3 class="timeline-title">Responsible Disclosures</h3>
+                    </div>
+                    <p class="timeline-desc">Joined bug bounty programs on HackerOne and Bugcrowd, reporting verified vulnerabilities to corporate software vendors.</p>
+                </div>
+                <div class="timeline-item glow-purple">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <span class="timeline-date">2024</span>
+                        <h3 class="timeline-title">Security Toolkit Arsenal</h3>
+                    </div>
+                    <p class="timeline-desc">Authored and released open-source cybersecurity utilities including <code>ssh-bruteforce</code>, <code>Portscanner</code>, and custom keylogger monitors.</p>
+                </div>
+                <div class="timeline-item glow-amber">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-header">
+                        <span class="timeline-date">2023</span>
+                        <h3 class="timeline-title">cybersecurity & Programming</h3>
+                    </div>
+                    <p class="timeline-desc">Began operational study in scripting languages (Python/Bash), networking protocols, and web application attack vectors.</p>
+                </div>
             </div>
         </section>
 

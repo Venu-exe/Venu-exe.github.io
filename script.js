@@ -59,7 +59,7 @@ function drawMatrix() {
     ctx.fillStyle = 'rgba(5, 8, 12, 0.04)';
     ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = '#00ff66';
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim() || '#00ff66';
     ctx.font = fontSize + 'px "Share Tech Mono", monospace';
 
     for (let i = 0; i < drops.length; i++) {
@@ -144,6 +144,9 @@ const commands = {
         printLine('  <span class="text-success">about</span>      - Read Venu\'s operational profile');
         printLine('  <span class="text-success">skills</span>     - Review technical capabilities & tools');
         printLine('  <span class="text-success">projects</span>   - Audit code repositories');
+        printLine('  <span class="text-success">timeline</span>   - Load cybersecurity journey milestones');
+        printLine('  <span class="text-success">sysinfo</span>    - Print diagnostic system information');
+        printLine('  <span class="text-success">theme</span>      - Change shell UI theme (e.g. <span class="text-highlight">theme cyberpunk</span>)');
         printLine('  <span class="text-success">scan</span>       - Trigger simulated Nmap/Subdomain reconnaissance');
         printLine('  <span class="text-success">exploit</span>    - Launch mock penetration payload modules');
         printLine('  <span class="text-success">clear</span>      - Clean console history');
@@ -185,6 +188,21 @@ const commands = {
     bugcrowd: () => {
         printLine('Redirecting to https://bugcrowd.com/h/venu-sh ...', 'text-success');
         window.open('https://bugcrowd.com/h/venu-sh', '_blank');
+    },
+    sysinfo: () => {
+        printLine('--- DIAGNOSTIC SYSTEM INFO ---', 'text-highlight');
+        printLine('Host OS          : Arch Linux x86_64');
+        printLine('Active Shell     : Bash 5.2.15 (venu@security)');
+        printLine('Tunnel Status    : Encrypted TLS/DNSSEC');
+        const activeTheme = document.body.className.replace('-theme', '');
+        printLine(`System Theme     : ${activeTheme.charAt(0).toUpperCase() + activeTheme.slice(1)}`);
+    },
+    timeline: () => {
+        printLine('--- JOURNEY TIMELINE ---', 'text-highlight');
+        printLine('2026: Built and integrated automated recon suite (full-recon).');
+        printLine('2025: Logged private and public disclosures on HackerOne/Bugcrowd.');
+        printLine('2024: Published Python security tools (ssh-bruteforce, keylogger, Portscanner).');
+        printLine('2023: Initiated studies in cybersecurity, Python, Bash, networking.');
     },
     scan: () => {
         printLine('Initializing Recon module...', 'text-highlight');
@@ -251,6 +269,18 @@ function executeCommand(inputLine) {
             inspectProjectLogs(parts[1].toLowerCase());
         } else {
             printLine('Error: Specify which project repository to inspect. Usage: inspect [project_name]', 'text-error');
+        }
+    } else if (cmd === 'theme') {
+        if (parts[1]) {
+            const requested = parts[1].toLowerCase();
+            if (['matrix', 'cyberpunk', 'glacier', 'amber'].includes(requested)) {
+                changeTheme(requested);
+                printLine(`Theme switched to ${requested}.`, 'text-success');
+            } else {
+                printLine('Error: Invalid theme name. Options: matrix, cyberpunk, glacier, amber', 'text-error');
+            }
+        } else {
+            printLine('Error: Specify theme name. Usage: theme [matrix/cyberpunk/glacier/amber]', 'text-error');
         }
     } else if (commands[cmd]) {
         commands[cmd]();
@@ -414,3 +444,25 @@ function handleContactSubmit(event) {
         submitBtn.innerHTML = '<span class="btn-text"><i class="fa-solid fa-paper-plane"></i> TRANSMIT</span>';
     }, 3200);
 }
+
+// Theme Switcher Implementation
+function changeTheme(themeName) {
+    // Remove existing themes
+    document.body.classList.remove('matrix-theme', 'cyberpunk-theme', 'glacier-theme', 'amber-theme');
+    
+    // Add selected theme
+    document.body.classList.add(`${themeName}-theme`);
+    
+    // Sync dropdown value
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) {
+        themeSelect.value = themeName;
+    }
+    
+    printLine(`[*] System color scheme configured: ${themeName.toUpperCase()}`, 'text-mute');
+}
+
+// Initializing Default Theme on Load
+document.addEventListener('DOMContentLoaded', () => {
+    changeTheme('matrix');
+});
