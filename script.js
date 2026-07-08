@@ -476,9 +476,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialise Users and Requests Databases
     initPortalDatabases();
     
+    // Check IP blacklist ban status
+    checkIpBan();
+    
     // Check auth status
     const isAuthed = sessionStorage.getItem('cyber_auth');
-    if (isAuthed === 'true') {
+    const isBanned = localStorage.getItem('venu_ip_banned');
+    if (isAuthed === 'true' && isBanned !== 'true') {
         const panel = document.getElementById('login-panel');
         if (panel) panel.classList.add('hidden');
         renderPortal();
@@ -695,10 +699,70 @@ function handleLoginAttempt() {
         }, 3000);
         
     } else {
-        setTimeout(() => {
-            printLoginLog('[!] ACCESS DENIED: Invalid key or ID parameters.', 'text-error');
-        }, 800);
+        const isAdminAttempt = userVal.toLowerCase() === 'admin@security.local' || userVal.toLowerCase() === 'admin';
+        
+        if (isAdminAttempt) {
+            loginBtn.disabled = true;
+            setTimeout(() => {
+                printLoginLog('[!] ACCESS DENIED: Password credentials mismatch.', 'text-error');
+                printLoginLog('[!] SECURITY INCIDENT TRIGGERED: Unauthorized admin access attempt.', 'text-error');
+            }, 600);
+            
+            setTimeout(() => {
+                printLoginLog('[*] Resolving client connection headers...', 'text-mute');
+            }, 1400);
+            
+            setTimeout(() => {
+                printLoginLog('[+] Target Operator IP Resolved: 198.51.100.42', 'text-success');
+                printLoginLog('[!] STATUS CODE 403: Forbidden access.', 'text-error');
+                printLoginLog('[!] IP 198.51.100.42 has been flagged and blacklisted.', 'text-error');
+                localStorage.setItem('venu_ip_banned', 'true');
+            }, 2400);
+            
+            setTimeout(() => {
+                loginBtn.disabled = false;
+                checkIpBan();
+            }, 4000);
+            
+        } else {
+            setTimeout(() => {
+                printLoginLog('[!] ACCESS DENIED: Invalid credentials.', 'text-error');
+            }, 800);
+        }
     }
+}
+
+// --- FIREWALL LOCKOUT HANDLERS (HTTP 403) ---
+function checkIpBan() {
+    const isBanned = localStorage.getItem('venu_ip_banned');
+    const panel = document.getElementById('login-panel');
+    if (isBanned === 'true' && panel) {
+        panel.innerHTML = `
+            <div class="login-box" style="border-color: #ff5f56; box-shadow: 0 0 20px rgba(255, 95, 86, 0.4); width: 100%; max-width: 450px;">
+                <div class="login-header" style="color: #ff5f56; border-bottom: 1px solid #ff5f56; background-color: rgba(255, 95, 86, 0.05);">
+                    <i class="fa-solid fa-triangle-exclamation"></i> HTTP/1.1 403 FORBIDDEN
+                </div>
+                <div class="login-body" style="text-align: center; gap: 1.2rem; padding: 2rem;">
+                    <p style="color: #ff5f56; font-weight: bold; font-size: 1.1rem; margin: 0;">[!] SECURITY BLACKLIST TRIGGERED</p>
+                    <p class="login-hint" style="margin: 0; font-size: 0.85rem; line-height: 1.4;">Your client IP signature (198.51.100.42) has been blacklisted in local firewall rules due to unauthorized administrator access attempts.</p>
+                    <div class="login-console-logs" style="text-align: left; height: 110px; border-color: rgba(255,95,86,0.3); background-color: #020408; padding: 0.8rem; font-size: 0.75rem;">
+                        <p class="text-error" style="margin:0 0 0.3rem 0;">[!] Exclusion event: admin login mismatch</p>
+                        <p class="text-mute" style="margin:0 0 0.3rem 0;">[*] Target: /portal/admin_dashboard</p>
+                        <p class="text-error" style="margin:0 0 0.3rem 0;">[!] Status: 403 IP_BANNED</p>
+                        <p class="text-mute" style="margin:0;">[*] Rule: Reject TCP packets from 198.51.100.42.</p>
+                    </div>
+                    <button onclick="clearBannedIp()" class="cyber-btn" style="border-color: var(--primary-color); color: var(--primary-color); margin-top: 1rem; width: 100%; justify-content: center; font-family: 'Share Tech Mono', monospace; font-size: 0.85rem;">
+                        <i class="fa-solid fa-shield-halved"></i> RESET LOCAL FIREWALL (UNBAN)
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function clearBannedIp() {
+    localStorage.removeItem('venu_ip_banned');
+    location.reload();
 }
 
 function handleLogout() {
