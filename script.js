@@ -262,6 +262,7 @@ function executeCommand(inputLine) {
 // Simulated inspect logs for projects
 const projectInspectLogs = {
     'ssh-bruteforce': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> python3 ssh-bruteforce.py -h 192.168.1.45 -u sysadmin -w rockyou.txt',
         '[*] Launching ssh-bruteforce.py...',
         '[*] Target Host: 192.168.1.45:22',
         '[*] Thread Count: 16 threads active',
@@ -275,6 +276,7 @@ const projectInspectLogs = {
         '[*] Execution finished.'
     ],
     'portscanner': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> python3 portscanner.py -t 8.8.8.8 -p 1-1024',
         '[*] Launching Portscanner...',
         '[*] Target IP: 8.8.8.8',
         '[*] Scanning ports 1 through 1024...',
@@ -286,6 +288,7 @@ const projectInspectLogs = {
         '[*] Scan complete. Found 2 open ports in 1.4 seconds.'
     ],
     'keylogger': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> python3 keylogger.py --log-file win_system_log.txt',
         '[*] Initializing keylogger interceptor...',
         '[*] Hooking Windows keyboard subsystem (SetWindowsHookExA)...',
         '[*] Operational log file: %TEMP%\\win_system_log.txt',
@@ -298,6 +301,7 @@ const projectInspectLogs = {
         '[+] Log successfully dispatched. Local buffer wiped.'
     ],
     'recon': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> python3 recon.py -d example.com',
         '[*] Launching Python Recon Toolkit...',
         '[*] Scope Domain: example.com',
         '[*] Gathering DNS records (A, AAAA, MX, TXT, NS)...',
@@ -312,6 +316,7 @@ const projectInspectLogs = {
         '[*] Port scanning targets... 80, 443 open. All tasks completed.'
     ],
     'full-recon': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> ./full-recon.sh -d example.com',
         '[*] Booting Bash Full-Recon Framework...',
         '[*] Tool suite dependencies: Subfinder, Amass, Httpx, Nmap, GoSpider',
         '[*] Stage 1: Running passive subdomain analysis...',
@@ -325,6 +330,7 @@ const projectInspectLogs = {
         '[+] Done. Execution finished in 22 seconds.'
     ],
     'profile': [
+        '<span class="term-prompt">guest@venu-shell:~$</span> gh repo view Venu-exe/Venu-exe.github.io',
         '[*] Loading Venu-exe Github Profile configuration...',
         '[*] Handle: Venu-exe',
         '[*] Repositories: 6 public repositories audited.',
@@ -342,11 +348,15 @@ function inspectProjectLogs(repoName) {
             if (idx < logs.length) {
                 let line = logs[idx];
                 let type = 'text-mute';
-                if (line.includes('[+]')) type = 'text-success';
-                if (line.includes('[!]')) type = 'text-error';
+                if (line.startsWith('<span')) {
+                    type = ''; // preserve terminal prompt style
+                } else {
+                    if (line.includes('[+]')) type = 'text-success';
+                    if (line.includes('[!]')) type = 'text-error';
+                }
                 printLine(line, type);
                 idx++;
-                setTimeout(printNextLog, 250);
+                setTimeout(printNextLog, 120);
             }
         }
         printNextLog();
@@ -361,7 +371,7 @@ function simulateInspect(repoName) {
     commands.clear();
     setTimeout(() => {
         inspectProjectLogs(repoName);
-    }, 600);
+    }, 400);
 }
 
 // Contact form submission simulator
