@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venu-exe | Ethical Hacker & Security Researcher</title>
+    <meta name="description" content="Portfolio of Venu-exe, an ethical hacker and security researcher specializing in bug bounties, web application security, and offensive tool development.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Cyber Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="cyber-theme">
+    <!-- Matrix Rain Canvas Background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Scan Lines Overlay for Retro CRT Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Main Navigation -->
+    <header class="cyber-header">
+        <div class="logo">
+            <span class="prompt-prefix">venu@security:~#</span> <span class="logo-text">Venu-exe</span><span class="cursor">_</span>
+        </div>
+        <nav class="cyber-nav">
+            <a href="#about" class="nav-link active" id="nav-about-btn"><i class="fa-solid fa-user-secret"></i> Profile</a>
+            <a href="#terminal" class="nav-link" id="nav-terminal-btn"><i class="fa-solid fa-terminal"></i> Terminal</a>
+            <a href="#arsenal" class="nav-link" id="nav-arsenal-btn"><i class="fa-solid fa-shield-halved"></i> Arsenal</a>
+            <a href="#projects" class="nav-link" id="nav-projects-btn"><i class="fa-solid fa-laptop-code"></i> Projects</a>
+            <a href="#platforms" class="nav-link" id="nav-platforms-btn"><i class="fa-solid fa-bug"></i> Platforms</a>
+            <a href="#contact" class="nav-link" id="nav-contact-btn"><i class="fa-solid fa-envelope"></i> Contact</a>
+        </nav>
+    </header>
+
+    <main class="cyber-container">
+        <!-- HUD Stats Section -->
+        <section class="hud-stats-grid">
+            <div class="hud-card glow-green">
+                <div class="hud-label">SYSTEM_STATUS</div>
+                <div class="hud-value blink">ONLINE</div>
+            </div>
+            <div class="hud-card glow-cyan">
+                <div class="hud-label">DISCLOSED_VULNS</div>
+                <div class="hud-value">ACTIVE</div>
+            </div>
+            <div class="hud-card glow-purple">
+                <div class="hud-label">ARSENAL_LOADED</div>
+                <div class="hud-value">100%</div>
+            </div>
+            <div class="hud-card glow-amber">
+                <div class="hud-label">CURRENT_TGT</div>
+                <div class="hud-value">RESPONSIBLE_DISC</div>
+            </div>
+        </section>
+
+        <!-- About Profile Section -->
+        <section id="about" class="section-card active">
+            <div class="about-grid">
+                <div class="profile-frame">
+                    <img src="assets/avatar.jpg" alt="Venu-exe Cyber Avatar" class="profile-img">
+                    <div class="frame-decor top-left"></div>
+                    <div class="frame-decor top-right"></div>
+                    <div class="frame-decor bottom-left"></div>
+                    <div class="frame-decor bottom-right"></div>
+                </div>
+                <div class="about-info">
+                    <h1 class="glitch-text" data-text="VENU">VENU</h1>
+                    <h2 class="sub-headline">Ethical Hacker & Offensive Tool Developer</h2>
+                    <div class="cyber-divider"></div>
+                    <p class="mission-text">
+                        <i class="fa-solid fa-quote-left icon-green"></i>
+                        Finding vulnerabilities before the bad guys do. Writing secure code. Building offensive security tools. Breaking things responsibly.
+                        <i class="fa-solid fa-quote-right icon-green"></i>
+                    </p>
+                    <div class="quick-facts">
+                        <div class="fact-item"><span class="fact-label">Location:</span> <span class="fact-val">Tiruvannamalai, Tamil Nadu, India</span></div>
+                        <div class="fact-item"><span class="fact-label">Specialization:</span> <span class="fact-val">Web Pentesting / Bug Hunting / Automation</span></div>
+                        <div class="fact-item"><span class="fact-label">Ethos:</span> <span class="fact-val">No Harm. Just Protection.</span></div>
+                    </div>
+                    <div class="about-actions">
+                        <a href="#terminal" class="cyber-btn primary-btn" onclick="activateSection('terminal')"><i class="fa-solid fa-terminal"></i> Initialize Shell</a>
+                        <a href="https://github.com/Venu-exe" target="_blank" rel="noopener noreferrer" class="cyber-btn"><i class="fa-brands fa-github"></i> GitHub Profile</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Terminal Section -->
+        <section id="terminal" class="section-card">
+            <div class="terminal-window">
+                <div class="terminal-bar">
+                    <div class="window-buttons">
+                        <span class="win-btn close"></span>
+                        <span class="win-btn minimize"></span>
+                        <span class="win-btn maximize"></span>
+                    </div>
+                    <div class="terminal-title">venu@security:~ - interactive_shell.sh</div>
+                </div>
+                <div class="terminal-body" id="term-body">
+                    <div class="terminal-output">
+                        <p class="text-mute">System Initialized at 2026-07-08T18:07:32. Secure tunnel established.</p>
+                        <p>Welcome, guest. Type <span class="text-highlight">help</span> to view available commands, or <span class="text-highlight">exploit</span> / <span class="text-highlight">scan</span> to run simulated modules.</p>
+                        <br>
+                    </div>
+                    <div class="terminal-input-line">
+                        <span class="term-prompt">guest@venu-shell:~$</span>
+                        <input type="text" id="term-input" autofocus autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills / Arsenal Section -->
+        <section id="arsenal" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-shield-halved"></i> Threat Arsenal</h2>
+            <div class="cyber-divider"></div>
+            <div class="skills-grid">
+                <!-- Coding/Scripting Skills -->
+                <div class="skill-category glow-green">
+                    <h3><i class="fa-solid fa-code"></i> Languages & Automation</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Python (Offensive Tools / Dev)</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Bash (Automation / Recon)</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 75%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>JavaScript / HTML5 / CSS3</span>
+                                <span>65%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 65%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Fields Skills -->
+                <div class="skill-category glow-cyan">
+                    <h3><i class="fa-solid fa-bug"></i> Pentesting & Bounties</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Web Application Security</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 85%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Bug Bounty Hunting</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 80%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Reconnaissance & Asset Discovery</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 90%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning/Evolution Skills -->
+                <div class="skill-category glow-purple">
+                    <h3><i class="fa-solid fa-circle-nodes"></i> Research Sectors</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Red Team Operations (Learning)</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 60%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>SOC & Threat Analysis (Learning)</span>
+                                <span>55%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 55%;"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span>Mobile App Pentesting (Learning)</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="skill-bar-bg"><div class="skill-bar-fill" style="width: 45%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-laptop-code"></i> Pinned Repositories</h2>
+            <div class="cyber-divider"></div>
+            <div class="projects-grid">
+                <!-- ssh-bruteforce -->
+                <div class="project-card glow-green">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-brands fa-python"></i> Python</span>
+                        <a href="https://github.com/Venu-exe/ssh-bruteforce" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>ssh-bruteforce</h3>
+                    <p class="proj-desc">A multi-threaded SSH brute-forcing tool designed to evaluate password strength on target hosts with high throughput and dictionary attack support.</p>
+                    <div class="proj-tags">
+                        <span>Bruteforce</span>
+                        <span>SSH</span>
+                        <span>Security</span>
+                        <span>Threading</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('ssh-bruteforce')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+
+                <!-- Portscanner -->
+                <div class="project-card glow-cyan">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-brands fa-python"></i> Python</span>
+                        <a href="https://github.com/Venu-exe/Portscanner" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>Portscanner</h3>
+                    <p class="proj-desc">Fast TCP/UDP port scanner leveraging custom sockets to check active ports, identify banner details, and detect service versions on targeted IP addresses.</p>
+                    <div class="proj-tags">
+                        <span>Scanner</span>
+                        <span>Sockets</span>
+                        <span>Recon</span>
+                        <span>Networking</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('portscanner')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+
+                <!-- Keylogger -->
+                <div class="project-card glow-purple">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-brands fa-python"></i> Python</span>
+                        <a href="https://github.com/Venu-exe/keylogger" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>keylogger</h3>
+                    <p class="proj-desc">A keystroke logger developed for educational security testing, supporting local storage and email notification functionality for security monitoring.</p>
+                    <div class="proj-tags">
+                        <span>Monitoring</span>
+                        <span>OSINT</span>
+                        <span>Malware-Analysis</span>
+                        <span>Security</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('keylogger')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+
+                <!-- recon -->
+                <div class="project-card glow-green">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-brands fa-python"></i> Python</span>
+                        <a href="https://github.com/Venu-exe/recon" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>recon</h3>
+                    <p class="proj-desc">Information gathering framework aggregating subdomains, resolving IPs, checking DNS records, and looking for exposed configuration paths on assets.</p>
+                    <div class="proj-tags">
+                        <span>Recon</span>
+                        <span>Subdomains</span>
+                        <span>DNS</span>
+                        <span>Automation</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('recon')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+
+                <!-- full-recon -->
+                <div class="project-card glow-amber">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-solid fa-terminal"></i> Bash / Shell</span>
+                        <a href="https://github.com/Venu-exe/full-recon" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>full-recon</h3>
+                    <p class="proj-desc">An extensive shell script automating domain reconnaissance, wrapping Subfinder, Amass, Nmap, and HTTPX into a unified execution pipeline.</p>
+                    <div class="proj-tags">
+                        <span>Shell</span>
+                        <span>Security-Automation</span>
+                        <span>Subfinder</span>
+                        <span>Recon</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('full-recon')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+
+                <!-- Profile repo -->
+                <div class="project-card glow-cyan">
+                    <div class="card-header">
+                        <span class="proj-lang"><i class="fa-brands fa-markdown"></i> Profile Info</span>
+                        <a href="https://github.com/Venu-exe/Venu-exe" target="_blank" rel="noopener noreferrer" class="proj-link"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                    <h3>Venu-exe (Profile)</h3>
+                    <p class="proj-desc">Personal repository hosting profile markdown, stats visualizers, and links mapping Venu's overall mission and security research journey.</p>
+                    <div class="proj-tags">
+                        <span>Markdown</span>
+                        <span>Bio</span>
+                        <span>Overview</span>
+                        <span>Readme</span>
+                    </div>
+                    <button class="inspect-btn" onclick="simulateInspect('profile')"><i class="fa-solid fa-search"></i> Inspect Logs</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Links Section -->
+        <section id="platforms" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-bug"></i> Security Platforms</h2>
+            <div class="cyber-divider"></div>
+            <p class="platform-description">Active profile statistics and reporting portals for responsible disclosure programs and bounty hunting:</p>
+            <div class="platforms-grid">
+                <!-- HackerOne -->
+                <a href="https://hackerone.com/venu-sh" target="_blank" rel="noopener noreferrer" class="platform-card glow-green">
+                    <div class="platform-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>HackerOne</h3>
+                    <span class="platform-handle">@venu-sh</span>
+                    <p>Submitting validated critical vulnerability reports and assisting vendors in mitigation.</p>
+                    <span class="platform-status-badge"><span class="badge-dot"></span> Active</span>
+                </a>
+
+                <!-- Bugcrowd -->
+                <a href="https://bugcrowd.com/h/venu-sh" target="_blank" rel="noopener noreferrer" class="platform-card glow-cyan">
+                    <div class="platform-icon"><i class="fa-solid fa-bug"></i></div>
+                    <h3>Bugcrowd</h3>
+                    <span class="platform-handle">venu-sh</span>
+                    <p>Participating in private and public security programs targeting enterprise web scopes.</p>
+                    <span class="platform-status-badge"><span class="badge-dot"></span> Active</span>
+                </a>
+
+                <!-- GitHub -->
+                <a href="https://github.com/Venu-exe" target="_blank" rel="noopener noreferrer" class="platform-card glow-purple">
+                    <div class="platform-icon"><i class="fa-brands fa-github"></i></div>
+                    <h3>GitHub</h3>
+                    <span class="platform-handle">@Venu-exe</span>
+                    <p>Open source security utilities, bash scanning scripts, and automated recon tools.</p>
+                    <span class="platform-status-badge"><span class="badge-dot"></span> Active</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Secure Contact Section -->
+        <section id="contact" class="section-card">
+            <h2 class="section-title"><i class="fa-solid fa-envelope"></i> Secure Channel</h2>
+            <div class="cyber-divider"></div>
+            <div class="contact-grid">
+                <div class="contact-meta">
+                    <h3>ESTABLISH TUNNEL</h3>
+                    <p>If you wish to report a security vulnerability, collaborate on cybersecurity tooling, or hire me for consulting/penetration testing, submit your details through this channel.</p>
+                    <p class="text-mute"><i class="fa-solid fa-lock icon-green"></i> End-to-end simulation. Messages are logged locally in the console dashboard.</p>
+                    <div class="pgp-box">
+                        <span class="pgp-header"><i class="fa-solid fa-key"></i> PUBLIC KEY FINGERPRINT</span>
+                        <code class="pgp-key">B62E C921 A55F 88DE D4F1 8C73 1B09 F0A2 VNU1 337X</code>
+                    </div>
+                </div>
+                <form id="contact-form" class="cyber-form" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label for="contact-name">> IDENTITY</label>
+                        <input type="text" id="contact-name" required placeholder="Name or Organization">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-email">> RETURN_ADDRESS</label>
+                        <input type="email" id="contact-email" required placeholder="Email or PGP Address">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-msg">> ENCRYPTED_MESSAGE</label>
+                        <textarea id="contact-msg" rows="5" required placeholder="Type your message here..."></textarea>
+                    </div>
+                    <button type="submit" class="cyber-btn primary-btn glow-green-btn" id="submit-btn">
+                        <span class="btn-text"><i class="fa-solid fa-paper-plane"></i> TRANSMIT</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="cyber-footer">
+        <p>Ethical Hacking Only · Responsible Disclosure · No Harm. Just Protection.</p>
+        <p class="copyright">&copy; 2026 Venu-exe. All rights reserved. Powered by digital stealth.</p>
+    </footer>
+
+    <!-- Interactive JS -->
+    <script src="script.js"></script>
+</body>
+</html>
