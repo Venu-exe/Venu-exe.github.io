@@ -1,72 +1,65 @@
-# Venu-exe | Cybersecurity Portfolio Website
+# Venu-exe | Cybersecurity Portfolio
 
-A high-fidelity, interactive cybersecurity portfolio designed specifically for **Venu-exe**. The application features an interactive terminal shell simulation, Matrix digital rain animation, live stats counters, project inspection modes, and a PGP-encrypted message terminal simulator.
+[![Live Site](https://img.shields.io/badge/Live-venu--exe.github.io-00ff41?logo=githubpages)](https://venu-exe.github.io/)
+[![GitHub](https://img.shields.io/badge/GitHub-Venu--exe-181717?logo=github)](https://github.com/Venu-exe)
+[![HackerOne](https://img.shields.io/badge/HackerOne-venu--sh-494649?logo=hackerone)](https://hackerone.com/venu-sh)
+[![Bugcrowd](https://img.shields.io/badge/Bugcrowd-venu--sh-F26822?logo=bugcrowd)](https://bugcrowd.com/h/venu-sh)
 
-## ✨ Features
-1. **Interactive Cyber Terminal**:
-   - Supports typing real commands: `help`, `about`, `skills`, `projects`, `scan`, `exploit`, `hackerone`, `bugcrowd`.
-   - Simulates terminal inspection of codebases (try: `inspect Portscanner` or `inspect ssh-bruteforce`).
-2. **Matrix Digital Rain Background**: High-performance canvas-based binary rain.
-3. **CRT HUD Theme**: A glowing retro-modern scanner theme responsive to all devices.
-4. **Platform Badging**: Showcase HackerOne, Bugcrowd, and GitHub.
-5. **Simulated Secure transmission channel**: Integrates contact forms with terminal outputs.
+Personal portfolio of **Venu-exe** — ethical hacker, bug bounty hunter, and offensive tool developer.
+
+## ✨ Highlights
+
+- 🖥️ Interactive cyber-terminal (commands: `help`, `scan`, `exploit`, `inspect <repo>`)
+- 🌧️ Matrix digital rain background + CRT scanline HUD theme
+- 🎨 4 themes: Matrix Green, Cyberpunk Purple, Glacier Blue, Amber Alert
+- 📌 Pinned showcase of top security tools (bountyrecon, Beast, assetmap, bountyreport, JSScope, APIFlowHunter)
+- 📊 Live HUD stats (repos, platforms, arsenal)
+- 📱 Fully responsive
 
 ## 🛠️ Tech Stack
-- HTML5 (Semantic Structure)
-- Vanilla CSS3 (Custom animations, CRT scanline effects, glow keyframes)
-- Vanilla JavaScript (Terminal command parser, Matrix animation canvas)
-- FontAwesome & Google Fonts (`Fira Code`, `Share Tech Mono`)
 
-## 🚀 How to Run Locally
-Open the `index.html` file directly in any modern browser, or spin up a local development server from this directory:
+- HTML5 (semantic structure)
+- Vanilla CSS3 (CRT scanlines, glow keyframes, animations)
+- Vanilla JavaScript (terminal parser, Matrix canvas, theme switcher)
+- FontAwesome + Google Fonts (`Fira Code`, `Share Tech Mono`)
 
-### Python 3
+## 📂 Structure
+
+```
+.
+├── index.html      # single-page portfolio
+├── style.css       # theme + animations
+├── script.js       # terminal, matrix rain, interactions
+├── assets/         # images, avatar
+└── README.md
+```
+
+## 🚀 Run Locally
+
 ```bash
 python3 -m http.server 8080
+# open http://localhost:8080
 ```
-Then visit: `http://localhost:8080`
 
-### Node.js / npm
-```bash
-npx http-server -p 8080
-```
-Then visit: `http://localhost:8080`
+## 🌐 Featured Projects
 
----
+| Project | Lang | Description |
+|---|---|---|
+| [bountyrecon](https://github.com/Venu-exe/bountyrecon) | Python | All-in-one bug bounty recon toolkit (zero deps) |
+| [Beast](https://github.com/Venu-exe/Beast) | C | Fast multi-threaded recon, single binary |
+| [assetmap](https://github.com/Venu-exe/assetmap) | C | Fingerprinting: favicon, crt.sh, TLS, headers |
+| [bountyreport](https://github.com/Venu-exe/bountyreport) | Python | Bug bounty report generator + CVSS 3.1 calc |
+| [JSScope](https://github.com/Venu-exe/JSScope) | Python | JS secret/endpoint/GraphQL scanner |
+| [APIFlowHunter](https://github.com/Venu-exe/APIFlowHunter) | C | API endpoint discovery from specs & JS |
 
-## 🌐 Suitable Domain Recommendations for Venu-exe
-To deploy your personal portfolio, here are recommended, highly professional domain options:
+## 📬 Contact
 
-1. **`venuexe.dev`** (Highly Recommended)
-   - *Why:* Combines your Github name `Venu-exe` with the developer extension `.dev`. Since `.exe` is an executable extension and `.dev` stands for developer, this is highly tech-centric and memorable.
-2. **`venush.dev` / `venush.com`**
-   - *Why:* Aligns directly with your HackerOne & Bugcrowd handle (`venu-sh`), creating a cohesive personal security brand.
-3. **`venuexe.com`**
-   - *Why:* The classic `.com` is globally trusted, highly recognizable, and excellent for SEO.
-4. **`venusec.com` / `venusec.dev`**
-   - *Why:* Combines your name with the standard suffix for cybersecurity professionals ("sec").
+- GitHub: [@Venu-exe](https://github.com/Venu-exe)
+- HackerOne: [@venu-sh](https://hackerone.com/venu-sh)
+- Bugcrowd: [venu-sh](https://bugcrowd.com/h/venu-sh)
+- Portfolio: [venu-exe.github.io](https://venu-exe.github.io/)
 
----
+## 📄 License
 
-## ☁️ How to Deploy for Free
-
-### Option 1: GitHub Pages (Easiest)
-1. Initialize a Git repository here:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit of portfolio"
-   ```
-2. Create a new repository on GitHub named `Venu-exe.github.io` (or a custom repository name).
-3. Add the remote and push:
-   ```bash
-   git remote add origin https://github.com/Venu-exe/your-repo-name.git
-   git branch -M main
-   git push -u origin main
-   ```
-4. In GitHub, go to **Settings** > **Pages** > Select `main` branch > **Save**.
-5. Your portfolio will live at: `https://Venu-exe.github.io/` or your repository's pages URL.
-
-### Option 2: Vercel / Netlify
-- Drag-and-drop the `/home/venu/Projects/portfolio` folder directly into [Vercel](https://vercel.com) or [Netlify](https://netlify.com) for instant SSL-secured global deployment.
-- You can easily link your custom domain (e.g., `venuexe.dev` or `venush.com`) through their UI.
+Personal portfolio — content © Venu-exe. Code available for inspiration.
+"""
