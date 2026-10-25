@@ -3,30 +3,28 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>z3r00s3c — Bug Bounty Hunter & Security Researcher</title>
-<meta name="description" content="Bug bounty hunter specializing in IDOR, authentication bypass, and access control vulnerabilities. Creator of 30+ open-source security tools." />
+<title>Venu Gopal — Security Researcher & Bug Bounty Hunter</title>
+<meta name="description" content="Security researcher and bug bounty hunter specializing in web application security, API testing, and vulnerability research." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  --bg: #030712;
-  --bg2: #0a0f1a;
-  --card: #0d1320;
-  --border: #1a2332;
-  --accent: #00ff88;
-  --accent2: #00d4ff;
-  --accent3: #ff3366;
-  --accent4: #ffaa00;
-  --accent5: #aa66ff;
-  --text: #e6edf3;
-  --muted: #6b7a8d;
-  --glow: 0 0 30px rgba(0,255,136,0.4);
+  --bg: #0a0f1a;
+  --bg2: #0f1623;
+  --card: #131b2e;
+  --border: #1e2d4a;
+  --accent: #00d4ff;
+  --accent2: #00ff88;
+  --accent3: #7c3aed;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --glow: 0 0 40px rgba(0,212,255,0.15);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -34,6 +32,7 @@ body {
 }
 ::selection { background: var(--accent); color: #000; }
 
+/* Subtle animated background */
 .bg-animated {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   z-index: 0; pointer-events: none; overflow: hidden;
@@ -41,75 +40,84 @@ body {
 .bg-animated .grid {
   position: absolute; top: 0; left: 0; width: 200%; height: 200%;
   background-image:
-    linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  animation: gridMove 30s linear infinite;
 }
-@keyframes gridMove { 0% { transform: translate(0,0); } 100% { transform: translate(-60px,-60px); } }
-.bg-animated .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
-.orb1 { width: 400px; height: 400px; background: var(--accent); top: -100px; right: -100px; animation: float1 15s ease-in-out infinite; }
-.orb2 { width: 300px; height: 300px; background: var(--accent2); bottom: -50px; left: -50px; animation: float2 20s ease-in-out infinite; }
-.orb3 { width: 250px; height: 250px; background: var(--accent5); top: 40%; left: 50%; animation: float3 18s ease-in-out infinite; }
-@keyframes float1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-30px,30px); } }
-@keyframes float2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(30px,-20px); } }
-@keyframes float3 { 0%,100% { transform: translate(-50%,-50%); } 50% { transform: translate(-40%,-60%); } }
+@keyframes gridMove { 0% { transform: translate(0,0); } 100% { transform: translate(-80px,-80px); } }
+.bg-animated .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.08; }
+.orb1 { width: 500px; height: 500px; background: var(--accent); top: -150px; right: -100px; }
+.orb2 { width: 400px; height: 400px; background: var(--accent3); bottom: -100px; left: -100px; }
+.orb3 { width: 300px; height: 300px; background: var(--accent2); top: 50%; left: 50%; transform: translate(-50%,-50%); }
 
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(3,7,18,0.7); backdrop-filter: blur(24px) saturate(180%); border-bottom: 1px solid var(--border); z-index: 1000; padding: 16px 0; transition: all 0.3s; }
+/* Nav */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(10,15,26,0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000; padding: 16px 0;
+}
 nav .container { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.3rem; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-.logo::before { content: '>'; color: var(--accent2); font-weight: 400; margin-right: 4px; }
-.logo span { color: var(--muted); font-weight: 400; }
-nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
-nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; position: relative; }
-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; font-size: 1.2rem;
+  color: var(--accent); text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.logo::before { content: '>'; color: var(--accent2); font-weight: 400; margin-right: 2px; }
+nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
 nav a:hover { color: var(--accent); }
-nav a:hover::after { width: 100%; }
 .nav-cta { background: var(--accent) !important; color: #000 !important; padding: 10px 20px; border-radius: 8px; font-weight: 600 !important; }
-.nav-cta::after { display: none !important; }
-.nav-cta:hover { background: #00e07a !important; transform: translateY(-2px); box-shadow: var(--glow); }
+.nav-cta:hover { background: #00b8e0 !important; transform: translateY(-2px); }
 
-.hero { min-height: 100vh; display: flex; align-items: center; padding: 140px 0 60px; }
-.hero-content { max-width: 800px; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); padding: 8px 16px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 28px; }
-.hero-badge .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+/* Hero */
+.hero { min-height: 100vh; display: flex; align-items: center; padding: 140px 0 80px; }
+.hero-content { max-width: 700px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+  padding: 8px 16px; border-radius: 30px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent);
+  margin-bottom: 28px;
+}
+.hero-badge .dot { width: 8px; height: 8px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
-.hero h1 { font-size: clamp(3rem,7vw,5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.03em; }
-.hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 5s ease infinite; background-size: 200% 200%; }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-.hero .subtitle { font-family: 'JetBrains Mono', monospace; color: var(--accent2); font-size: 1.1rem; margin-bottom: 20px; }
-.hero .desc { color: var(--muted); font-size: 1.15rem; max-width: 620px; margin-bottom: 36px; line-height: 1.7; }
+.hero h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
+.hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero .subtitle { font-family: 'JetBrains Mono', monospace; color: var(--accent2); font-size: 1rem; margin-bottom: 20px; }
+.hero .desc { color: var(--muted); font-size: 1.1rem; max-width: 580px; margin-bottom: 36px; line-height: 1.7; }
 .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
 .btn { padding: 14px 28px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px; cursor: pointer; border: none; }
-.btn-primary { background: var(--accent); color: #000; box-shadow: 0 4px 24px rgba(0,255,136,0.3); }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,255,136,0.5); }
+.btn-primary { background: var(--accent); color: #000; box-shadow: 0 4px 24px rgba(0,212,255,0.3); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,212,255,0.5); }
 .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
 
-.terminal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.6); margin-top: 50px; }
+.terminal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); margin-top: 50px; }
 .terminal-header { background: var(--bg2); padding: 14px 18px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
 .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
 .terminal-dot.r { background: #ff5f57; } .terminal-dot.y { background: #febc2e; } .terminal-dot.g { background: #28c840; }
 .terminal-title { color: var(--muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-left: 10px; }
 .terminal-body { padding: 20px 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.9; }
-.terminal-body .prompt { color: var(--accent); }
+.terminal-body .prompt { color: var(--accent2); }
 .terminal-body .cmd { color: var(--text); }
 .terminal-body .output { color: var(--muted); }
-.terminal-body .success { color: var(--accent); }
-.terminal-body .highlight { color: var(--accent2); }
+.terminal-body .success { color: var(--accent2); }
+.terminal-body .highlight { color: var(--accent); }
 .terminal-body .str { color: #ff9966; }
 .terminal-body .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s infinite; vertical-align: middle; }
 @keyframes blink { 0%,50% { opacity:1; } 51%,100% { opacity:0; } }
 
-.stats-section { padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: linear-gradient(180deg, transparent, rgba(0,255,136,0.02), transparent); }
+.stats-section { padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 20px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
-.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
-.stat-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--glow); }
-.stat-card:hover::before { opacity: 1; }
-.stat-num { font-size: 3rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 20px; text-align: center; transition: all 0.3s; }
+.stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.stat-num { font-size: 3rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
 .stat-label { color: var(--muted); font-size: 0.8rem; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; }
 
 section { padding: 100px 0; }
@@ -120,58 +128,47 @@ section { padding: 100px 0; }
 .section-title .accent { color: var(--accent); }
 .section-desc { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin-top: 12px; }
 
-/* Skills - enhanced */
-.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden; }
-.skill-card::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: radial-gradient(circle at top right, rgba(0,255,136,0.08), transparent); }
-.skill-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--glow); }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.project { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; }
+.project:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 0 30px rgba(0,212,255,0.15); }
+.project-icon { font-size: 2rem; margin-bottom: 12px; }
+.project h3 { font-size: 1.1rem; margin-bottom: 8px; }
+.project p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px; }
+.project-lang { display: inline-block; background: var(--bg2); color: var(--accent); padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(0,212,255,0.2); margin-bottom: 12px; }
+.project a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.project a:hover { text-decoration: underline; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; }
+.skill-card:hover { border-color: var(--accent); transform: translateY(-4px); }
 .skill-icon { font-size: 2rem; margin-bottom: 12px; }
-.skill-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
+.skill-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
 .skill-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 .skill-tools { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
-.tool { background: var(--bg2); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid var(--border); transition: all 0.2s; }
-.tool:hover { border-color: var(--accent); color: var(--accent); }
+.tool { background: var(--bg2); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid var(--border); }
 
-/* Projects */
-.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-.project { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden; }
-.project:hover { border-color: var(--accent2); transform: translateY(-4px); box-shadow: 0 0 30px rgba(0,212,255,0.2); }
-.project::after { content: ''; position: absolute; top: 0; right: 0; width: 60px; height: 60px; background: radial-gradient(circle at top right, rgba(0,212,255,0.1), transparent); }
-.project-icon { font-size: 2rem; margin-bottom: 12px; }
-.project h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
-.project p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px; }
-.project-lang { display: inline-block; background: var(--bg2); color: var(--accent2); padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(0,212,255,0.2); margin-bottom: 12px; }
-.project a { color: var(--accent2); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s; }
-.project a:hover { gap: 10px; }
-
-/* Platforms */
 .platforms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.platform { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
-.platform::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity 0.3s; }
+.platform { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; text-align: center; transition: all 0.3s; }
 .platform:hover { border-color: var(--accent); transform: translateY(-4px); }
-.platform:hover::before { opacity: 1; }
 .platform-icon { font-size: 2.5rem; margin-bottom: 12px; }
 .platform .name { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
 .platform .handle { color: var(--muted); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 16px; }
-.platform a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.platform a { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; }
 .platform a:hover { text-decoration: underline; }
 
-/* Contact */
 .contact-section { text-align: center; }
 .contact-grid { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 36px; }
 .contact-card { background: var(--card); border: 1px solid var(--border); padding: 20px 28px; border-radius: 12px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 12px; transition: all 0.3s; min-width: 200px; }
-.contact-card:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: var(--glow); }
+.contact-card:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
 .contact-card .icon { font-size: 1.3rem; }
 .contact-card .label { font-weight: 600; font-size: 0.9rem; }
 .contact-card .sub { color: var(--muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
 
-/* Footer */
 footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
 footer .accent { color: var(--accent); }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 2.8rem; }
+  .hero h1 { font-size: 2.5rem; }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
   .platforms-grid { grid-template-columns: repeat(2,1fr); }
   .projects-grid { grid-template-columns: 1fr; }
@@ -180,16 +177,8 @@ footer .accent { color: var(--accent); }
   nav ul li:nth-child(2), nav ul li:nth-child(3) { display: none; }
 }
 
-/* Scroll animations */
 .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
-.glow-text { text-shadow: 0 0 20px rgba(0,255,136,0.5), 0 0 40px rgba(0,255,136,0.3); }
-.cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s infinite; vertical-align: middle; }
-@keyframes blink { 0%,50% { opacity:1; } 51%,100% { opacity:0; } }
-
-/* Particle */
-.particle { position: absolute; width: 2px; height: 2px; background: var(--accent); border-radius: 50%; opacity: 0.3; animation: particleFloat 10s linear infinite; }
-@keyframes particleFloat { 0% { transform: translateY(100vh) translateX(0); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100vh) translateX(100px); opacity: 0; } }
 </style>
 </head>
 <body>
@@ -200,12 +189,9 @@ footer .accent { color: var(--accent); }
     <div class="orb orb3"></div>
   </div>
 
-  <!-- Particles -->
-  <div id="particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></div>
-
   <nav id="nav">
     <div class="container">
-      <a href="#" class="logo">z3r00s3c</a>
+      <a href="#" class="logo">Venu Gopal</a>
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
@@ -216,17 +202,16 @@ footer .accent { color: var(--accent); }
     </div>
   </nav>
 
-  <!-- Hero -->
   <section class="hero" id="about">
     <div class="container">
       <div class="hero-content fade-in">
         <div class="hero-badge"><span class="dot"></span> Available for collaboration</div>
-        <h1>Hi, I'm <span class="gradient">z3r00s3c</span></h1>
-        <div class="subtitle">$ whoami → bug bounty hunter & security researcher</div>
+        <h1>Hi, I'm <span class="gradient">Venu Gopal</span></h1>
+        <div class="subtitle">$ whoami → security researcher & bug bounty hunter</div>
         <p class="desc">
-          I find vulnerabilities in web applications, APIs, and cloud infrastructure.
-          Specialized in IDOR, authentication bypass, and broken access control.
-          Creator of 30+ open-source security tools. Based in Tiruvannamalai, India.
+          I'm a security researcher from Tiruvannamalai, India. I find vulnerabilities in web applications, 
+          APIs, and cloud infrastructure. Specialized in IDOR, authentication bypass, and access control. 
+          Creator of 31 open-source security tools. Active on HackerOne, Bugcrowd, and Intigriti.
         </p>
         <div class="hero-btns">
           <a href="#projects" class="btn btn-primary">View Projects →</a>
@@ -239,19 +224,19 @@ footer .accent { color: var(--accent); }
           <span class="terminal-dot r"></span>
           <span class="terminal-dot y"></span>
           <span class="terminal-dot g"></span>
-          <span class="terminal-title">z3r00s3c@kali:~$</span>
+          <span class="terminal-title">venu@kali:~$</span>
         </div>
         <div class="terminal-body">
           <div><span class="prompt">$</span> <span class="cmd">cat profile.json</span></div>
           <div class="output">{</div>
+          <div class="output">  <span class="highlight">"name"</span>: <span class="str">"Venu Gopal"</span>,</div>
           <div class="output">  <span class="highlight">"alias"</span>: <span class="str">"z3r00s3c"</span>,</div>
-          <div class="output">  <span class="highlight">"role"</span>: <span class="str">"Security Researcher"</span>,</div>
           <div class="output">  <span class="highlight">"location"</span>: <span class="str">"Tiruvannamalai, India"</span>,</div>
+          <div class="output">  <span class="highlight">"role"</span>: <span class="str">"Security Researcher"</span>,</div>
           <div class="output">  <span class="highlight">"focus"</span>: [<span class="str">"IDOR"</span>, <span class="str">"Auth Bypass"</span>, <span class="str">"BAC"</span>, <span class="str">"GraphQL"</span>, <span class="str">"API Security"</span>],</div>
           <div class="output">  <span class="highlight">"platforms"</span>: [<span class="str">"HackerOne"</span>, <span class="str">"Bugcrowd"</span>, <span class="str">"Intigriti"</span>],</div>
           <div class="output">  <span class="highlight">"tools_built"</span>: <span class="success">31</span>,</div>
-          <div class="output">  <span class="highlight">"status"</span>: <span class="success">"hunting"</span>,</div>
-          <div class="output">  <span class="highlight">"currently_testing"</span>: [<span class="str">"SEEK"</span>, <span class="str">"Vinted"</span>, <span class="str">"Canada Goose"</span>]</div>
+          <div class="output">  <span class="highlight">"status"</span>: <span class="success">"hunting"</span></div>
           <div class="output">}</div>
           <div><span class="prompt">$</span> <span class="cmd">_</span><span class="cursor"></span></div>
         </div>
@@ -259,7 +244,6 @@ footer .accent { color: var(--accent); }
     </div>
   </section>
 
-  <!-- Stats -->
   <section class="stats-section">
     <div class="container">
       <div class="stats-grid">
@@ -283,7 +267,6 @@ footer .accent { color: var(--accent); }
     </div>
   </section>
 
-  <!-- Projects -->
   <section id="projects">
     <div class="container">
       <div class="section-header fade-in">
@@ -292,111 +275,21 @@ footer .accent { color: var(--accent); }
         <p class="section-desc">Security tools and utilities I've built for the bug bounty community. 31 repositories on GitHub.</p>
       </div>
       <div class="projects-grid">
-        <div class="project fade-in">
-          <div class="project-icon">🎯</div>
-          <span class="project-lang">Python</span>
-          <h3>BountyCommand</h3>
-          <p>All-in-one bug bounty command center: targets, findings, payload lab, CVSS calculator, report generator. Offline, localStorage.</p>
-          <a href="https://github.com/Venu-exe/bountycommand" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">💣</div>
-          <span class="project-lang">Python</span>
-          <h3>PayloadForge</h3>
-          <p>Zero-dependency bug bounty payload generator & mutator — 7 vuln types, 6 encodings, WAF-bypass variants.</p>
-          <a href="https://github.com/Venu-exe/payloadforge" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">📄</div>
-          <span class="project-lang">Python</span>
-          <h3>BountyReport</h3>
-          <p>Bug bounty submission report generator — CVSS 3.1 calculator, 27 vuln templates, 5 platform formats.</p>
-          <a href="https://github.com/Venu-exe/bountyreport" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">📡</div>
-          <span class="project-lang">Python</span>
-          <h3>VulnRadar</h3>
-          <p>Terminal mission control for bug bounty hunters — curses TUI with radar, targets, findings, loot tracker. Zero deps.</p>
-          <a href="https://github.com/Venu-exe/vulnradar" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🔍</div>
-          <span class="project-lang">Python</span>
-          <h3>APIFlowHunter</h3>
-          <p>Discovers and maps API endpoints from OpenAPI/Postman/Swagger specs and JS/GraphQL for IDOR and API security testing.</p>
-          <a href="https://github.com/Venu-exe/APIFlowHunter" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🛡️</div>
-          <span class="project-lang">Python</span>
-          <h3>TakeoverHunter</h3>
-          <p>Zero-dependency subdomain takeover detector — DNS + HTTP fingerprinting against ~45 services. Web dashboard, SQLite history.</p>
-          <a href="https://github.com/Venu-exe/takeoverhunter" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">⚡</div>
-          <span class="project-lang">C</span>
-          <h3>Beast</h3>
-          <p>Fast, multi-threaded recon toolkit — DNS, ports, subdomains, TLS, security headers. Pure C, single binary.</p>
-          <a href="https://github.com/Venu-exe/Beast" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🗺️</div>
-          <span class="project-lang">C</span>
-          <h3>AssetMap</h3>
-          <p>Fast recon & fingerprinting toolkit — favicon hash, crt.sh, SSL fingerprint, security header audit, TLS vuln scanner.</p>
-          <a href="https://github.com/Venu-exe/assetmap" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🔬</div>
-          <span class="project-lang">Python</span>
-          <h3>IDOR Prober</h3>
-          <p>Probes API endpoints for Insecure Direct Object Reference vulnerabilities. Automated IDOR testing.</p>
-          <a href="https://github.com/Venu-exe/idor_prober" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">☁️</div>
-          <span class="project-lang">Python</span>
-          <h3>S3 Toolkit</h3>
-          <p>Enumerates and checks S3 buckets for public access and misconfigurations.</p>
-          <a href="https://github.com/Venu-exe/s3-toolkit" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🎯</div>
-          <span class="project-lang">Shell</span>
-          <h3>Full Recon</h3>
-          <p>Shell pipeline that chains recon tools together into one end-to-end bug bounty workflow.</p>
-          <a href="https://github.com/Venu-exe/full-recon" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🕸️</div>
-          <span class="project-lang">Python</span>
-          <h3>JSScope</h3>
-          <p>Scans JavaScript files for exposed API endpoints, secrets, and GraphQL schemas during recon.</p>
-          <a href="https://github.com/Venu-exe/JSScope" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">📦</div>
-          <span class="project-lang">Python</span>
-          <h3>BountyRecon</h3>
-          <p>All-in-one bug bounty recon toolkit — zero dependencies, pure Python.</p>
-          <a href="https://github.com/Venu-exe/bountyrecon" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">⌨️</div>
-          <span class="project-lang">Python</span>
-          <h3>JsonExploit</h3>
-          <p>Parses and probes JSON responses/APIs for exposed data and misconfigurations during recon.</p>
-          <a href="https://github.com/Venu-exe/JsonExploit" target="_blank">View on GitHub →</a>
-        </div>
-        <div class="project fade-in">
-          <div class="project-icon">🔬</div>
-          <span class="project-lang">Python</span>
-          <h3>Port Scanner</h3>
-          <p>Simple multi-threaded TCP port scanner written in Python.</p>
-          <a href="https://github.com/Venu-exe/Portscanner" target="_blank">View on GitHub →</a>
-        </div>
+        <div class="project fade-in"><div class="project-icon">🎯</div><span class="project-lang">Python</span><h3>BountyCommand</h3><p>All-in-one bug bounty command center: targets, findings, payload lab, CVSS calculator, report generator.</p><a href="https://github.com/Venu-exe/bountycommand" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">💣</div><span class="project-lang">Python</span><h3>PayloadForge</h3><p>Zero-dependency bug bounty payload generator & mutator — 7 vuln types, 6 encodings, WAF-bypass variants.</p><a href="https://github.com/Venu-exe/payloadforge" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">📄</div><span class="project-lang">Python</span><h3>BountyReport</h3><p>Bug bounty submission report generator — CVSS 3.1 calculator, 27 vuln templates, 5 platform formats.</p><a href="https://github.com/Venu-exe/bountyreport" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">📡</div><span class="project-lang">Python</span><h3>VulnRadar</h3><p>Terminal mission control for bug bounty hunters — curses TUI with radar, targets, findings, loot tracker.</p><a href="https://github.com/Venu-exe/vulnradar" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🔍</div><span class="project-lang">Python</span><h3>APIFlowHunter</h3><p>Discovers and maps API endpoints from OpenAPI/Postman/Swagger specs and JS/GraphQL.</p><a href="https://github.com/Venu-exe/APIFlowHunter" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🛡️</div><span class="project-lang">Python</span><h3>TakeoverHunter</h3><p>Zero-dependency subdomain takeover detector — DNS + HTTP fingerprinting against ~45 services.</p><a href="https://github.com/Venu-exe/takeoverhunter" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">⚡</div><span class="project-lang">C</span><h3>Beast</h3><p>Fast, multi-threaded recon toolkit — DNS, ports, subdomains, TLS, security headers. Pure C, single binary.</p><a href="https://github.com/Venu-exe/Beast" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🗺️</div><span class="project-lang">C</span><h3>AssetMap</h3><p>Fast recon & fingerprinting toolkit — favicon hash, crt.sh, SSL fingerprint, security header audit.</p><a href="https://github.com/Venu-exe/assetmap" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🔬</div><span class="project-lang">Python</span><h3>IDOR Prober</h3><p>Probes API endpoints for Insecure Direct Object Reference vulnerabilities.</p><a href="https://github.com/Venu-exe/idor_prober" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">☁️</div><span class="project-lang">Python</span><h3>S3 Toolkit</h3><p>Enumerates and checks S3 buckets for public access and misconfigurations.</p><a href="https://github.com/Venu-exe/s3-toolkit" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🎯</div><span class="project-lang">Shell</span><h3>Full Recon</h3><p>Shell pipeline that chains recon tools together into one end-to-end bug bounty workflow.</p><a href="https://github.com/Venu-exe/full-recon" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🕸️</div><span class="project-lang">Python</span><h3>JSScope</h3><p>Scans JavaScript files for exposed API endpoints, secrets, and GraphQL schemas during recon.</p><a href="https://github.com/Venu-exe/JSScope" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">📦</div><span class="project-lang">Python</span><h3>BountyRecon</h3><p>All-in-one bug bounty recon toolkit — zero dependencies, pure Python.</p><a href="https://github.com/Venu-exe/bountyrecon" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">⌨️</div><span class="project-lang">Python</span><h3>JsonExploit</h3><p>Parses and probes JSON responses/APIs for exposed data and misconfigurations during recon.</p><a href="https://github.com/Venu-exe/JsonExploit" target="_blank">View on GitHub →</a></div>
+        <div class="project fade-in"><div class="project-icon">🔬</div><span class="project-lang">Python</span><h3>Port Scanner</h3><p>Simple multi-threaded TCP port scanner written in Python.</p><a href="https://github.com/Venu-exe/Portscanner" target="_blank">View on GitHub →</a></div>
       </div>
       <div style="text-align:center; margin-top:40px;">
         <a href="https://github.com/Venu-exe?tab=repositories" target="_blank" class="btn btn-outline">View All 31 Repositories →</a>
@@ -404,7 +297,6 @@ footer .accent { color: var(--accent); }
     </div>
   </section>
 
-  <!-- Skills -->
   <section id="skills">
     <div class="container">
       <div class="section-header fade-in">
@@ -413,97 +305,18 @@ footer .accent { color: var(--accent); }
         <p class="section-desc">Tools and methodologies I use for security research and development.</p>
       </div>
       <div class="skills-grid">
-        <div class="skill-card fade-in">
-          <div class="skill-icon">🔍</div>
-          <h3>Web Application Testing</h3>
-          <p>Manual testing for OWASP Top 10, business logic flaws, access control issues, and authentication bypasses.</p>
-          <div class="skill-tools">
-            <span class="tool">Burp Suite Pro</span>
-            <span class="tool">OWASP ZAP</span>
-            <span class="tool">Manual Testing</span>
-            <span class="tool">Browser DevTools</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">🔌</div>
-          <h3>API Security</h3>
-          <p>REST & GraphQL API testing for IDOR, BFLA, mass assignment, injection, and excessive data exposure.</p>
-          <div class="skill-tools">
-            <span class="tool">GraphQL</span>
-            <span class="tool">Postman</span>
-            <span class="tool">InQL</span>
-            <span class="tool">APIFlowHunter</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">🌐</div>
-          <h3>Reconnaissance</h3>
-          <p>Subdomain enumeration, endpoint discovery, attack surface mapping, and OSINT. Built 5+ custom recon tools.</p>
-          <div class="skill-tools">
-            <span class="tool">Subfinder</span>
-            <span class="tool">httpx</span>
-            <span class="tool">Nuclei</span>
-            <span class="tool">Beast</span>
-            <span class="tool">AssetMap</span>
-            <span class="tool">Full Recon</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">🔐</div>
-          <h3>Authentication Testing</h3>
-          <p>OTP bypass, session management, JWT analysis, OAuth/SSO flows, MFA bypass techniques.</p>
-          <div class="skill-tools">
-            <span class="tool">Burp Suite</span>
-            <span class="tool">JWT.io</span>
-            <span class="tool">Auth0</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">📱</div>
-          <h3>Mobile Security</h3>
-          <p>Android/iOS app testing — insecure storage, deep links, API abuse, and reverse engineering.</p>
-          <div class="skill-tools">
-            <span class="tool">MobSF</span>
-            <span class="tool">Frida</span>
-            <span class="tool">JADX</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">☁️</div>
-          <h3>Cloud Security</h3>
-          <p>AWS S3 misconfigurations, IAM issues, and cloud infrastructure testing.</p>
-          <div class="skill-tools">
-            <span class="tool">AWS CLI</span>
-            <span class="tool">S3 Toolkit</span>
-            <span class="tool">ScoutSuite</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">🐍</div>
-          <h3>Programming</h3>
-          <p>Python, C, Shell scripting, and JavaScript for tool development and automation.</p>
-          <div class="skill-tools">
-            <span class="tool">Python</span>
-            <span class="tool">C</span>
-            <span class="tool">Bash</span>
-            <span class="tool">JavaScript</span>
-          </div>
-        </div>
-        <div class="skill-card fade-in">
-          <div class="skill-icon">📊</div>
-          <h3>Report Writing</h3>
-          <p>Clear, structured vulnerability reports with reproduction steps, impact analysis, and remediation advice.</p>
-          <div class="skill-tools">
-            <span class="tool">BountyReport</span>
-            <span class="tool">CVSS 3.1</span>
-            <span class="tool">Markdown</span>
-          </div>
-        </div>
+        <div class="skill-card fade-in"><div class="skill-icon">🔍</div><h3>Web Application Testing</h3><p>Manual testing for OWASP Top 10, business logic flaws, access control issues, and authentication bypasses.</p><div class="skill-tools"><span class="tool">Burp Suite Pro</span><span class="tool">OWASP ZAP</span><span class="tool">Manual Testing</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">🔌</div><h3>API Security</h3><p>REST & GraphQL API testing for IDOR, BFLA, mass assignment, injection, and excessive data exposure.</p><div class="skill-tools"><span class="tool">GraphQL</span><span class="tool">Postman</span><span class="tool">InQL</span><span class="tool">APIFlowHunter</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">🌐</div><h3>Reconnaissance</h3><p>Subdomain enumeration, endpoint discovery, attack surface mapping, and OSINT. Built 5+ custom recon tools.</p><div class="skill-tools"><span class="tool">Subfinder</span><span class="tool">httpx</span><span class="tool">Nuclei</span><span class="tool">Beast</span><span class="tool">AssetMap</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">🔐</div><h3>Authentication Testing</h3><p>OTP bypass, session management, JWT analysis, OAuth/SSO flows, MFA bypass techniques.</p><div class="skill-tools"><span class="tool">Burp Suite</span><span class="tool">JWT.io</span><span class="tool">Auth0</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">📱</div><h3>Mobile Security</h3><p>Android/iOS app testing — insecure storage, deep links, API abuse, and reverse engineering.</p><div class="skill-tools"><span class="tool">MobSF</span><span class="tool">Frida</span><span class="tool">JADX</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">☁️</div><h3>Cloud Security</h3><p>AWS S3 misconfigurations, IAM issues, and cloud infrastructure testing.</p><div class="skill-tools"><span class="tool">AWS CLI</span><span class="tool">S3 Toolkit</span><span class="tool">ScoutSuite</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">🐍</div><h3>Programming</h3><p>Python, C, Shell scripting, and JavaScript for tool development and automation.</p><div class="skill-tools"><span class="tool">Python</span><span class="tool">C</span><span class="tool">Bash</span><span class="tool">JavaScript</span></div></div>
+        <div class="skill-card fade-in"><div class="skill-icon">📊</div><h3>Report Writing</h3><p>Clear, structured vulnerability reports with reproduction steps, impact analysis, and remediation advice.</p><div class="skill-tools"><span class="tool">BountyReport</span><span class="tool">CVSS 3.1</span><span class="tool">Markdown</span></div></div>
       </div>
     </div>
   </section>
 
-  <!-- Platforms -->
   <section id="platforms">
     <div class="container">
       <div class="section-header fade-in">
@@ -512,35 +325,14 @@ footer .accent { color: var(--accent); }
         <p class="section-desc">Active on major platforms with proven track record.</p>
       </div>
       <div class="platforms-grid">
-        <div class="platform fade-in">
-          <div class="platform-icon">🎯</div>
-          <div class="name">HackerOne</div>
-          <div class="handle">@venuexee</div>
-          <a href="https://hackerone.com/venuexee?type=user" target="_blank">View Profile →</a>
-        </div>
-        <div class="platform fade-in">
-          <div class="platform-icon">🐛</div>
-          <div class="name">Bugcrowd</div>
-          <div class="handle">@venu-sh</div>
-          <a href="https://bugcrowd.com/venu-sh" target="_blank">View Profile →</a>
-        </div>
-        <div class="platform fade-in">
-          <div class="platform-icon">🛡️</div>
-          <div class="name">Intigriti</div>
-          <div class="handle">@z3r00s3c</div>
-          <a href="https://app.intigriti.com/researcher/profile/z3r00s3c" target="_blank">View Profile →</a>
-        </div>
-        <div class="platform fade-in">
-          <div class="platform-icon">💻</div>
-          <div class="name">GitHub</div>
-          <div class="handle">Venu-exe</div>
-          <a href="https://github.com/Venu-exe" target="_blank">View Profile →</a>
-        </div>
+        <div class="platform fade-in"><div class="platform-icon">🎯</div><div class="name">HackerOne</div><div class="handle">@venuexee</div><a href="https://hackerone.com/venuexee?type=user" target="_blank">View Profile →</a></div>
+        <div class="platform fade-in"><div class="platform-icon">🐛</div><div class="name">Bugcrowd</div><div class="handle">@venu-sh</div><a href="https://bugcrowd.com/venu-sh" target="_blank">View Profile →</a></div>
+        <div class="platform fade-in"><div class="platform-icon">🛡️</div><div class="name">Intigriti</div><div class="handle">@z3r00s3c</div><a href="https://app.intigriti.com/researcher/profile/z3r00s3c" target="_blank">View Profile →</a></div>
+        <div class="platform fade-in"><div class="platform-icon">💻</div><div class="name">GitHub</div><div class="handle">Venu-exe</div><a href="https://github.com/Venu-exe" target="_blank">View Profile →</a></div>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
   <section id="contact">
     <div class="container contact-section">
       <div class="section-header fade-in">
@@ -549,33 +341,18 @@ footer .accent { color: var(--accent); }
         <p class="section-desc" style="margin:0 auto 36px;">Open to collaboration, teaming, and security discussions.</p>
       </div>
       <div class="contact-grid fade-in">
-        <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="contact-card">
-          <span class="icon">🔐</span>
-          <div><div class="label">HackerOne</div><div class="sub">@venuexee</div></div>
-        </a>
-        <a href="https://bugcrowd.com/venu-sh" target="_blank" class="contact-card">
-          <span class="icon">🐛</span>
-          <div><div class="label">Bugcrowd</div><div class="sub">@venu-sh</div></div>
-        </a>
-        <a href="https://app.intigriti.com/researcher/profile/z3r00s3c" target="_blank" class="contact-card">
-          <span class="icon">🛡️</span>
-          <div><div class="label">Intigriti</div><div class="sub">@z3r00s3c</div></div>
-        </a>
-        <a href="https://github.com/Venu-exe" target="_blank" class="contact-card">
-          <span class="icon">💻</span>
-          <div><div class="label">GitHub</div><div class="sub">Venu-exe (31 repos)</div></div>
-        </a>
-        <a href="mailto:rvenugopal152007@gmail.com" class="contact-card">
-          <span class="icon">✉️</span>
-          <div><div class="label">Email</div><div class="sub">rvenugopal152007@gmail.com</div></div>
-        </a>
+        <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="contact-card"><span class="icon">🔐</span><div><div class="label">HackerOne</div><div class="sub">@venuexee</div></div></a>
+        <a href="https://bugcrowd.com/venu-sh" target="_blank" class="contact-card"><span class="icon">🐛</span><div><div class="label">Bugcrowd</div><div class="sub">@venu-sh</div></div></a>
+        <a href="https://app.intigriti.com/researcher/profile/z3r00s3c" target="_blank" class="contact-card"><span class="icon">🛡️</span><div><div class="label">Intigriti</div><div class="sub">@z3r00s3c</div></div></a>
+        <a href="https://github.com/Venu-exe" target="_blank" class="contact-card"><span class="icon">💻</span><div><div class="label">GitHub</div><div class="sub">Venu-exe (31 repos)</div></div></a>
+        <a href="mailto:rvenugopal152007@gmail.com" class="contact-card"><span class="icon">✉️</span><div><div class="label">Email</div><div class="sub">rvenugopal152007@gmail.com</div></div></a>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <p>© 2026 <span class="accent">z3r00s3c</span> — Security Researcher & Bug Bounty Hunter</p>
+      <p>© 2026 <span class="accent">Venu Gopal</span> — Security Researcher & Bug Bounty Hunter</p>
       <p style="margin-top:8px; opacity:0.6;">Based in Tiruvannamalai, India | Built with ☕ and curiosity</p>
     </div>
   </footer>
@@ -584,7 +361,6 @@ footer .accent { color: var(--accent); }
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
     });
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
@@ -593,7 +369,6 @@ footer .accent { color: var(--accent); }
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -612,8 +387,6 @@ footer .accent { color: var(--accent); }
       });
     });
     counterObserver.observe(document.querySelector('.stats-section'));
-
-    // Particles
     const particlesContainer = document.getElementById('particles');
     for (let i = 0; i < 30; i++) {
       const p = document.createElement('div');
@@ -623,7 +396,6 @@ footer .accent { color: var(--accent); }
       p.style.animationDuration = (8 + Math.random() * 6) + 's';
       particlesContainer.appendChild(p);
     }
-
     document.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
@@ -635,5 +407,3 @@ footer .accent { color: var(--accent); }
   </script>
 </body>
 </html>
-HTMLEOF
-echo "Website updated!"
