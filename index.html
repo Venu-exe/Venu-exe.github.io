@@ -32,7 +32,6 @@ body {
 }
 ::selection { background: var(--accent); color: #000; }
 
-/* Subtle animated background */
 .bg-animated {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   z-index: 0; pointer-events: none; overflow: hidden;
@@ -53,21 +52,9 @@ body {
 
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-/* Nav */
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  background: rgba(10,15,26,0.8);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  z-index: 1000; padding: 16px 0;
-}
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(10,15,26,0.8); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); z-index: 1000; padding: 16px 0; }
 nav .container { display: flex; justify-content: space-between; align-items: center; }
-.logo {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700; font-size: 1.2rem;
-  color: var(--accent); text-decoration: none;
-  display: flex; align-items: center; gap: 8px;
-}
+.logo { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.2rem; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .logo::before { content: '>'; color: var(--accent2); font-weight: 400; margin-right: 2px; }
 nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
 nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
@@ -75,16 +62,9 @@ nav a:hover { color: var(--accent); }
 .nav-cta { background: var(--accent) !important; color: #000 !important; padding: 10px 20px; border-radius: 8px; font-weight: 600 !important; }
 .nav-cta:hover { background: #00b8e0 !important; transform: translateY(-2px); }
 
-/* Hero */
 .hero { min-height: 100vh; display: flex; align-items: center; padding: 140px 0 80px; }
 .hero-content { max-width: 700px; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
-  padding: 8px 16px; border-radius: 30px;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent);
-  margin-bottom: 28px;
-}
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); padding: 8px 16px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 28px; }
 .hero-badge .dot { width: 8px; height: 8px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
 .hero h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; }
@@ -97,6 +77,8 @@ nav a:hover { color: var(--accent); }
 .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,212,255,0.5); }
 .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+.btn-coffee { background: #FFDD00; color: #000; box-shadow: 0 4px 24px rgba(255,221,0,0.3); }
+.btn-coffee:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(255,221,0,0.5); }
 
 .terminal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.5); margin-top: 50px; }
 .terminal-header { background: var(--bg2); padding: 14px 18px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
@@ -164,6 +146,14 @@ section { padding: 100px 0; }
 .contact-card .label { font-weight: 600; font-size: 0.9rem; }
 .contact-card .sub { color: var(--muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
 
+/* Coffee section */
+.coffee-section { text-align: center; padding: 60px 0; }
+.coffee-card { background: linear-gradient(135deg, rgba(255,221,0,0.1), rgba(255,170,0,0.05)); border: 1px solid rgba(255,221,0,0.3); border-radius: 20px; padding: 48px; max-width: 600px; margin: 0 auto; }
+.coffee-card h3 { font-size: 1.5rem; margin-bottom: 12px; }
+.coffee-card p { color: var(--muted); margin-bottom: 24px; }
+.coffee-btn { display: inline-flex; align-items: center; gap: 10px; background: #FFDD00; color: #000; padding: 14px 32px; border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 20px rgba(255,221,0,0.3); }
+.coffee-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(255,221,0,0.5); }
+
 footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
 footer .accent { color: var(--accent); }
 
@@ -209,13 +199,14 @@ footer .accent { color: var(--accent); }
         <h1>Hi, I'm <span class="gradient">Venu Gopal</span></h1>
         <div class="subtitle">$ whoami → security researcher & bug bounty hunter</div>
         <p class="desc">
-          I'm a security researcher from Tiruvannamalai, India. I find vulnerabilities in web applications, 
-          APIs, and cloud infrastructure. Specialized in IDOR, authentication bypass, and access control. 
+          Security researcher from Tiruvannamalai, India. I find vulnerabilities in web applications, 
+          APIs, and cloud infrastructure. Specialized in IDOR, authentication bypass, and broken access control. 
           Creator of 31 open-source security tools. Active on HackerOne, Bugcrowd, and Intigriti.
         </p>
         <div class="hero-btns">
           <a href="#projects" class="btn btn-primary">View Projects →</a>
           <a href="https://github.com/Venu-exe" target="_blank" class="btn btn-outline">GitHub Profile</a>
+          <a href="https://www.buymeacoffee.com/rvenugopalw" target="_blank" class="btn btn-coffee">☕ Buy Me a Coffee</a>
         </div>
       </div>
 
@@ -247,22 +238,10 @@ footer .accent { color: var(--accent); }
   <section class="stats-section">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-card fade-in">
-          <div class="stat-num" data-target="8">0</div>
-          <div class="stat-label">Programs Tested</div>
-        </div>
-        <div class="stat-card fade-in">
-          <div class="stat-num" data-target="6">0</div>
-          <div class="stat-label">Reports Submitted</div>
-        </div>
-        <div class="stat-card fade-in">
-          <div class="stat-num" data-target="31">0</div>
-          <div class="stat-label">Tools Built</div>
-        </div>
-        <div class="stat-card fade-in">
-          <div class="stat-num" data-target="3">0</div>
-          <div class="stat-label">Platforms Active</div>
-        </div>
+        <div class="stat-card fade-in"><div class="stat-num" data-target="8">0</div><div class="stat-label">Programs Tested</div></div>
+        <div class="stat-card fade-in"><div class="stat-num" data-target="6">0</div><div class="stat-label">Reports Submitted</div></div>
+        <div class="stat-card fade-in"><div class="stat-num" data-target="31">0</div><div class="stat-label">Tools Built</div></div>
+        <div class="stat-card fade-in"><div class="stat-num" data-target="3">0</div><div class="stat-label">Platforms Active</div></div>
       </div>
     </div>
   </section>
@@ -333,6 +312,18 @@ footer .accent { color: var(--accent); }
     </div>
   </section>
 
+  <section id="coffee">
+    <div class="container">
+      <div class="coffee-section fade-in">
+        <div class="coffee-card">
+          <h3>☕ Buy Me a Coffee</h3>
+          <p>If you find my work helpful, consider buying me a coffee to keep the research going!</p>
+          <a href="https://www.buymeacoffee.com/rvenugopalw" target="_blank" class="coffee-btn">☕ Buy Me a Coffee</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="contact">
     <div class="container contact-section">
       <div class="section-header fade-in">
@@ -346,6 +337,7 @@ footer .accent { color: var(--accent); }
         <a href="https://app.intigriti.com/researcher/profile/z3r00s3c" target="_blank" class="contact-card"><span class="icon">🛡️</span><div><div class="label">Intigriti</div><div class="sub">@z3r00s3c</div></div></a>
         <a href="https://github.com/Venu-exe" target="_blank" class="contact-card"><span class="icon">💻</span><div><div class="label">GitHub</div><div class="sub">Venu-exe (31 repos)</div></div></a>
         <a href="mailto:rvenugopal152007@gmail.com" class="contact-card"><span class="icon">✉️</span><div><div class="label">Email</div><div class="sub">rvenugopal152007@gmail.com</div></div></a>
+        <a href="https://www.buymeacoffee.com/rvenugopalw" target="_blank" class="contact-card"><span class="icon">☕</span><div><div class="label">Buy Me a Coffee</div><div class="sub">Support my work</div></div></a>
       </div>
     </div>
   </section>
