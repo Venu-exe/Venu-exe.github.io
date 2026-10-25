@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>z3r00s3c — Bug Bounty Hunter & Security Researcher</title>
-<meta name="description" content="Bug bounty hunter specializing in IDOR, authentication bypass, and access control vulnerabilities. Creator of bounty tools and security research." />
+<meta name="description" content="Bug bounty hunter specializing in IDOR, authentication bypass, and access control vulnerabilities. Creator of 30+ open-source security tools." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -34,7 +34,6 @@ body {
 }
 ::selection { background: var(--accent); color: #000; }
 
-/* Animated background */
 .bg-animated {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   z-index: 0; pointer-events: none; overflow: hidden;
@@ -48,10 +47,7 @@ body {
   animation: gridMove 20s linear infinite;
 }
 @keyframes gridMove { 0% { transform: translate(0,0); } 100% { transform: translate(-60px,-60px); } }
-.bg-animated .orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: 0.15;
-}
+.bg-animated .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; }
 .orb1 { width: 400px; height: 400px; background: var(--accent); top: -100px; right: -100px; animation: float1 15s ease-in-out infinite; }
 .orb2 { width: 300px; height: 300px; background: var(--accent2); bottom: -50px; left: -50px; animation: float2 20s ease-in-out infinite; }
 .orb3 { width: 250px; height: 250px; background: var(--accent5); top: 40%; left: 50%; animation: float3 18s ease-in-out infinite; }
@@ -61,22 +57,9 @@ body {
 
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
-/* Nav */
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  background: rgba(3,7,18,0.7);
-  backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid var(--border);
-  z-index: 1000; padding: 16px 0;
-  transition: all 0.3s;
-}
+nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(3,7,18,0.7); backdrop-filter: blur(24px) saturate(180%); border-bottom: 1px solid var(--border); z-index: 1000; padding: 16px 0; transition: all 0.3s; }
 nav .container { display: flex; justify-content: space-between; align-items: center; }
-.logo {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 800; font-size: 1.3rem;
-  color: var(--accent); text-decoration: none;
-  display: flex; align-items: center; gap: 8px;
-}
+.logo { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.3rem; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .logo::before { content: '>'; color: var(--accent2); font-weight: 400; margin-right: 4px; }
 .logo span { color: var(--muted); font-weight: 400; }
 nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
@@ -88,18 +71,11 @@ nav a:hover::after { width: 100%; }
 .nav-cta::after { display: none !important; }
 .nav-cta:hover { background: #00e07a !important; transform: translateY(-2px); box-shadow: var(--glow); }
 
-/* Hero */
 .hero { min-height: 100vh; display: flex; align-items: center; padding: 140px 0 60px; }
 .hero-content { max-width: 800px; }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2);
-  padding: 8px 16px; border-radius: 30px;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent);
-  margin-bottom: 28px;
-}
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); padding: 8px 16px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 28px; }
 .hero-badge .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
 .hero h1 { font-size: clamp(3rem,7vw,5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 16px; letter-spacing: -0.03em; }
 .hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 5s ease infinite; background-size: 200% 200%; }
 @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -112,7 +88,6 @@ nav a:hover::after { width: 100%; }
 .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
 
-/* Terminal */
 .terminal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.6); margin-top: 50px; }
 .terminal-header { background: var(--bg2); padding: 14px 18px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
 .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
@@ -128,7 +103,6 @@ nav a:hover::after { width: 100%; }
 .terminal-body .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s infinite; vertical-align: middle; }
 @keyframes blink { 0%,50% { opacity:1; } 51%,100% { opacity:0; } }
 
-/* Stats */
 .stats-section { padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: linear-gradient(180deg, transparent, rgba(0,255,136,0.02), transparent); }
 .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
 .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 20px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
@@ -138,7 +112,6 @@ nav a:hover::after { width: 100%; }
 .stat-num { font-size: 3rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .stat-label { color: var(--muted); font-size: 0.8rem; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; }
 
-/* Section */
 section { padding: 100px 0; }
 .section-header { margin-bottom: 50px; }
 .section-tag { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 0.85rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -147,27 +120,17 @@ section { padding: 100px 0; }
 .section-title .accent { color: var(--accent); }
 .section-desc { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin-top: 12px; }
 
-/* Findings */
-.findings-grid { display: grid; gap: 20px; }
-.finding { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
-.finding::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: var(--accent); opacity: 0; transition: opacity 0.3s; }
-.finding:hover { border-color: rgba(0,255,136,0.3); transform: translateX(6px); }
-.finding:hover::before { opacity: 1; }
-.finding-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 12px; }
-.finding-title { font-size: 1.2rem; font-weight: 600; flex: 1; min-width: 200px; }
-.badge { padding: 5px 14px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
-.badge-p2 { background: rgba(255,51,102,0.15); color: var(--accent3); border: 1px solid var(--accent3); }
-.badge-p3 { background: rgba(255,170,0,0.15); color: var(--accent4); border: 1px solid var(--accent4); }
-.badge-review { background: rgba(0,212,255,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
-.badge-new { background: rgba(170,102,255,0.15); color: var(--accent5); border: 1px solid var(--accent5); }
-.finding-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; font-size: 0.82rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
-.finding-meta span { display: flex; align-items: center; gap: 5px; }
-.finding-desc { color: var(--muted); margin-bottom: 18px; line-height: 1.7; font-size: 0.95rem; }
-.finding-desc code { background: var(--bg2); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }
-.finding-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-.tag { background: rgba(0,255,136,0.06); color: var(--accent); padding: 4px 12px; border-radius: 6px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(0,255,136,0.15); }
-.finding-link { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-top: 16px; transition: gap 0.2s; }
-.finding-link:hover { gap: 12px; }
+/* Skills - enhanced */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; position: relative; overflow: hidden; }
+.skill-card::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: radial-gradient(circle at top right, rgba(0,255,136,0.08), transparent); }
+.skill-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--glow); }
+.skill-icon { font-size: 2rem; margin-bottom: 12px; }
+.skill-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
+.skill-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.skill-tools { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tool { background: var(--bg2); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid var(--border); transition: all 0.2s; }
+.tool:hover { border-color: var(--accent); color: var(--accent); }
 
 /* Projects */
 .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
@@ -178,21 +141,11 @@ section { padding: 100px 0; }
 .project h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
 .project p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px; }
 .project-lang { display: inline-block; background: var(--bg2); color: var(--accent2); padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid rgba(0,212,255,0.2); margin-bottom: 12px; }
-.project a { color: var(--accent2); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-.project a:hover { text-decoration: underline; }
-
-/* Skills */
-.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-.skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.3s; }
-.skill-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--glow); }
-.skill-icon { font-size: 2rem; margin-bottom: 12px; }
-.skill-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
-.skill-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-.skill-tools { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
-.tool { background: var(--bg2); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; border: 1px solid var(--border); }
+.project a { color: var(--accent2); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: gap 0.2s; }
+.project a:hover { gap: 10px; }
 
 /* Platforms */
-.platforms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.platforms-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .platform { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
 .platform::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity 0.3s; }
 .platform:hover { border-color: var(--accent); transform: translateY(-4px); }
@@ -220,25 +173,21 @@ footer .accent { color: var(--accent); }
 @media (max-width: 768px) {
   .hero h1 { font-size: 2.8rem; }
   .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .platforms-grid { grid-template-columns: 1fr; }
+  .platforms-grid { grid-template-columns: repeat(2,1fr); }
   .projects-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
   nav ul { gap: 16px; }
   nav ul li:nth-child(2), nav ul li:nth-child(3) { display: none; }
-  .skills-grid { grid-template-columns: 1fr; }
 }
 
 /* Scroll animations */
 .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-/* Glowing */
 .glow-text { text-shadow: 0 0 20px rgba(0,255,136,0.5), 0 0 40px rgba(0,255,136,0.3); }
-
-/* Cursor blink */
 .cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s infinite; vertical-align: middle; }
 @keyframes blink { 0%,50% { opacity:1; } 51%,100% { opacity:0; } }
 
-/* Floating particles */
+/* Particle */
 .particle { position: absolute; width: 2px; height: 2px; background: var(--accent); border-radius: 50%; opacity: 0.3; animation: particleFloat 10s linear infinite; }
 @keyframes particleFloat { 0% { transform: translateY(100vh) translateX(0); opacity: 0; } 10% { opacity: 0.3; } 90% { opacity: 0.3; } 100% { transform: translateY(-100vh) translateX(100px); opacity: 0; } }
 </style>
@@ -251,13 +200,14 @@ footer .accent { color: var(--accent); }
     <div class="orb orb3"></div>
   </div>
 
-  <!-- Nav -->
+  <!-- Particles -->
+  <div id="particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;"></div>
+
   <nav id="nav">
     <div class="container">
       <a href="#" class="logo">z3r00s3c</a>
       <ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#findings">Findings</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#platforms">Platforms</a></li>
@@ -276,10 +226,10 @@ footer .accent { color: var(--accent); }
         <p class="desc">
           I find vulnerabilities in web applications, APIs, and cloud infrastructure.
           Specialized in IDOR, authentication bypass, and broken access control.
-          Creator of 20+ open-source security tools on GitHub.
+          Creator of 30+ open-source security tools. Based in Tiruvannamalai, India.
         </p>
         <div class="hero-btns">
-          <a href="#findings" class="btn btn-primary">View Findings →</a>
+          <a href="#projects" class="btn btn-primary">View Projects →</a>
           <a href="https://github.com/Venu-exe" target="_blank" class="btn btn-outline">GitHub Profile</a>
         </div>
       </div>
@@ -296,9 +246,10 @@ footer .accent { color: var(--accent); }
           <div class="output">{</div>
           <div class="output">  <span class="highlight">"alias"</span>: <span class="str">"z3r00s3c"</span>,</div>
           <div class="output">  <span class="highlight">"role"</span>: <span class="str">"Security Researcher"</span>,</div>
+          <div class="output">  <span class="highlight">"location"</span>: <span class="str">"Tiruvannamalai, India"</span>,</div>
           <div class="output">  <span class="highlight">"focus"</span>: [<span class="str">"IDOR"</span>, <span class="str">"Auth Bypass"</span>, <span class="str">"BAC"</span>, <span class="str">"GraphQL"</span>, <span class="str">"API Security"</span>],</div>
           <div class="output">  <span class="highlight">"platforms"</span>: [<span class="str">"HackerOne"</span>, <span class="str">"Bugcrowd"</span>, <span class="str">"Intigriti"</span>],</div>
-          <div class="output">  <span class="highlight">"tools_built"</span>: <span class="success">25+</span>,</div>
+          <div class="output">  <span class="highlight">"tools_built"</span>: <span class="success">31</span>,</div>
           <div class="output">  <span class="highlight">"status"</span>: <span class="success">"hunting"</span>,</div>
           <div class="output">  <span class="highlight">"currently_testing"</span>: [<span class="str">"SEEK"</span>, <span class="str">"Vinted"</span>, <span class="str">"Canada Goose"</span>]</div>
           <div class="output">}</div>
@@ -321,112 +272,12 @@ footer .accent { color: var(--accent); }
           <div class="stat-label">Reports Submitted</div>
         </div>
         <div class="stat-card fade-in">
-          <div class="stat-num" data-target="25">0</div>
+          <div class="stat-num" data-target="31">0</div>
           <div class="stat-label">Tools Built</div>
         </div>
         <div class="stat-card fade-in">
           <div class="stat-num" data-target="3">0</div>
           <div class="stat-label">Platforms Active</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Findings -->
-  <section id="findings">
-    <div class="container">
-      <div class="section-header fade-in">
-        <div class="section-tag">findings</div>
-        <h2 class="section-title">Featured <span class="accent">Vulnerabilities</span></h2>
-        <p class="section-desc">Real vulnerabilities discovered and reported through responsible disclosure.</p>
-      </div>
-      <div class="findings-grid">
-        <div class="finding fade-in">
-          <div class="finding-top">
-            <div class="finding-title">OTP Authentication Bypass via Replay of Verification Response</div>
-            <span class="badge badge-review">Under Review</span>
-          </div>
-          <div class="finding-meta">
-            <span>🏢 Canada Goose Inc.</span>
-            <span>📅 Oct 2026</span>
-            <span>🎯 HackerOne</span>
-            <span>🔒 Auth Bypass</span>
-          </div>
-          <p class="finding-desc">
-            The authentication flow is vulnerable to OTP verification bypass through replay of a previously successful verification response. An attacker can intercept a valid 200 OK response during a legitimate OTP submission, then replay it during a new login attempt with an invalid OTP — completely bypassing the second factor of authentication.
-          </p>
-          <div class="finding-tags">
-            <span class="tag">Authentication Bypass</span>
-            <span class="tag">OTP Replay</span>
-            <span class="tag">Broken Access Control</span>
-            <span class="tag">Response Manipulation</span>
-          </div>
-          <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="finding-link">View on HackerOne →</a>
-        </div>
-
-        <div class="finding fade-in">
-          <div class="finding-top">
-            <div class="finding-title">IDOR on documentUploadFormData — S3 Upload Credential Exposure</div>
-            <span class="badge badge-p3">P3</span>
-          </div>
-          <div class="finding-meta">
-            <span>🏢 SEEK</span>
-            <span>📅 Oct 2026</span>
-            <span>🎯 Bugcrowd</span>
-            <span>🔒 IDOR</span>
-          </div>
-          <p class="finding-desc">
-            The <code>viewer.documentUploadFormData(id: UUID!)</code> GraphQL query generates S3 presigned upload credentials (including <code>X-Amz-Security-Token</code>) for any arbitrary UUID without verifying document ownership. Tested with all-zeros UUID — endpoint returned valid AWS credentials. Any authenticated user can generate upload credentials for any document ID.
-          </p>
-          <div class="finding-tags">
-            <span class="tag">IDOR</span>
-            <span class="tag">GraphQL</span>
-            <span class="tag">AWS S3</span>
-            <span class="tag">Credential Exposure</span>
-          </div>
-        </div>
-
-        <div class="finding fade-in">
-          <div class="finding-top">
-            <div class="finding-title">IDOR on /api/v2/users/{id} — User Profile Enumeration</div>
-            <span class="badge badge-review">Under Review</span>
-          </div>
-          <div class="finding-meta">
-            <span>🏢 Vinted</span>
-            <span>📅 Oct 2026</span>
-            <span>🎯 Bugcrowd</span>
-            <span>🔒 IDOR</span>
-          </div>
-          <p class="finding-desc">
-            The endpoint returns full user profile data for any user ID without authorization checks. Exposes internal identifiers (anon_id), moderator/admin flags, verification status, privacy settings, and business account linkage. Allows full user enumeration by iterating through IDs.
-          </p>
-          <div class="finding-tags">
-            <span class="tag">IDOR</span>
-            <span class="tag">User Enumeration</span>
-            <span class="tag">Information Disclosure</span>
-            <span class="tag">Privacy Violation</span>
-          </div>
-        </div>
-
-        <div class="finding fade-in">
-          <div class="finding-top">
-            <div class="finding-title">IDOR on seller_badges/achieved — Seller Badge Enumeration</div>
-            <span class="badge badge-review">Under Review</span>
-          </div>
-          <div class="finding-meta">
-            <span>🏢 Vinted</span>
-            <span>📅 Oct 2026</span>
-            <span>🎯 Bugcrowd</span>
-            <span>🔒 IDOR</span>
-          </div>
-          <p class="finding-desc">
-            The endpoint returns a seller's earned badges (e.g., ACTIVE_LISTER) for any sellerID value without verifying authorization. Any authenticated user can enumerate badge data for every seller on the platform by iterating the sellerID parameter.
-          </p>
-          <div class="finding-tags">
-            <span class="tag">IDOR</span>
-            <span class="tag">Enumeration</span>
-            <span class="tag">Access Control</span>
-          </div>
         </div>
       </div>
     </div>
@@ -438,7 +289,7 @@ footer .accent { color: var(--accent); }
       <div class="section-header fade-in">
         <div class="section-tag">projects</div>
         <h2 class="section-title">Open Source <span class="accent">Tools</span></h2>
-        <p class="section-desc">Security tools and utilities I've built for the bug bounty community.</p>
+        <p class="section-desc">Security tools and utilities I've built for the bug bounty community. 31 repositories on GitHub.</p>
       </div>
       <div class="projects-grid">
         <div class="project fade-in">
@@ -525,9 +376,30 @@ footer .accent { color: var(--accent); }
           <p>Scans JavaScript files for exposed API endpoints, secrets, and GraphQL schemas during recon.</p>
           <a href="https://github.com/Venu-exe/JSScope" target="_blank">View on GitHub →</a>
         </div>
+        <div class="project fade-in">
+          <div class="project-icon">📦</div>
+          <span class="project-lang">Python</span>
+          <h3>BountyRecon</h3>
+          <p>All-in-one bug bounty recon toolkit — zero dependencies, pure Python.</p>
+          <a href="https://github.com/Venu-exe/bountyrecon" target="_blank">View on GitHub →</a>
+        </div>
+        <div class="project fade-in">
+          <div class="project-icon">⌨️</div>
+          <span class="project-lang">Python</span>
+          <h3>JsonExploit</h3>
+          <p>Parses and probes JSON responses/APIs for exposed data and misconfigurations during recon.</p>
+          <a href="https://github.com/Venu-exe/JsonExploit" target="_blank">View on GitHub →</a>
+        </div>
+        <div class="project fade-in">
+          <div class="project-icon">🔬</div>
+          <span class="project-lang">Python</span>
+          <h3>Port Scanner</h3>
+          <p>Simple multi-threaded TCP port scanner written in Python.</p>
+          <a href="https://github.com/Venu-exe/Portscanner" target="_blank">View on GitHub →</a>
+        </div>
       </div>
       <div style="text-align:center; margin-top:40px;">
-        <a href="https://github.com/Venu-exe?tab=repositories" target="_blank" class="btn btn-outline">View All 30+ Repositories →</a>
+        <a href="https://github.com/Venu-exe?tab=repositories" target="_blank" class="btn btn-outline">View All 31 Repositories →</a>
       </div>
     </div>
   </section>
@@ -538,7 +410,7 @@ footer .accent { color: var(--accent); }
       <div class="section-header fade-in">
         <div class="section-tag">skills</div>
         <h2 class="section-title">Technical <span class="accent">Arsenal</span></h2>
-        <p class="section-desc">Tools and methodologies I use for security research.</p>
+        <p class="section-desc">Tools and methodologies I use for security research and development.</p>
       </div>
       <div class="skills-grid">
         <div class="skill-card fade-in">
@@ -549,6 +421,7 @@ footer .accent { color: var(--accent); }
             <span class="tool">Burp Suite Pro</span>
             <span class="tool">OWASP ZAP</span>
             <span class="tool">Manual Testing</span>
+            <span class="tool">Browser DevTools</span>
           </div>
         </div>
         <div class="skill-card fade-in">
@@ -565,13 +438,14 @@ footer .accent { color: var(--accent); }
         <div class="skill-card fade-in">
           <div class="skill-icon">🌐</div>
           <h3>Reconnaissance</h3>
-          <p>Subdomain enumeration, endpoint discovery, attack surface mapping, and OSINT.</p>
+          <p>Subdomain enumeration, endpoint discovery, attack surface mapping, and OSINT. Built 5+ custom recon tools.</p>
           <div class="skill-tools">
             <span class="tool">Subfinder</span>
             <span class="tool">httpx</span>
             <span class="tool">Nuclei</span>
             <span class="tool">Beast</span>
             <span class="tool">AssetMap</span>
+            <span class="tool">Full Recon</span>
           </div>
         </div>
         <div class="skill-card fade-in">
@@ -602,6 +476,27 @@ footer .accent { color: var(--accent); }
             <span class="tool">AWS CLI</span>
             <span class="tool">S3 Toolkit</span>
             <span class="tool">ScoutSuite</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🐍</div>
+          <h3>Programming</h3>
+          <p>Python, C, Shell scripting, and JavaScript for tool development and automation.</p>
+          <div class="skill-tools">
+            <span class="tool">Python</span>
+            <span class="tool">C</span>
+            <span class="tool">Bash</span>
+            <span class="tool">JavaScript</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">📊</div>
+          <h3>Report Writing</h3>
+          <p>Clear, structured vulnerability reports with reproduction steps, impact analysis, and remediation advice.</p>
+          <div class="skill-tools">
+            <span class="tool">BountyReport</span>
+            <span class="tool">CVSS 3.1</span>
+            <span class="tool">Markdown</span>
           </div>
         </div>
       </div>
@@ -668,7 +563,7 @@ footer .accent { color: var(--accent); }
         </a>
         <a href="https://github.com/Venu-exe" target="_blank" class="contact-card">
           <span class="icon">💻</span>
-          <div><div class="label">GitHub</div><div class="sub">Venu-exe</div></div>
+          <div><div class="label">GitHub</div><div class="sub">Venu-exe (31 repos)</div></div>
         </a>
         <a href="mailto:rvenugopal152007@gmail.com" class="contact-card">
           <span class="icon">✉️</span>
@@ -681,17 +576,15 @@ footer .accent { color: var(--accent); }
   <footer>
     <div class="container">
       <p>© 2026 <span class="accent">z3r00s3c</span> — Security Researcher & Bug Bounty Hunter</p>
-      <p style="margin-top:8px; opacity:0.6;">Built with ☕ and curiosity | <a href="https://github.com/Venu-exe" style="color:var(--accent);text-decoration:none;">GitHub</a></p>
+      <p style="margin-top:8px; opacity:0.6;">Based in Tiruvannamalai, India | Built with ☕ and curiosity</p>
     </div>
   </footer>
 
   <script>
-    // Nav scroll effect
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Intersection Observer for fade-in animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
@@ -701,7 +594,6 @@ footer .accent { color: var(--accent); }
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    // Animated counters
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -721,7 +613,17 @@ footer .accent { color: var(--accent); }
     });
     counterObserver.observe(document.querySelector('.stats-section'));
 
-    // Smooth parallax for orbs
+    // Particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 10 + 's';
+      p.style.animationDuration = (8 + Math.random() * 6) + 's';
+      particlesContainer.appendChild(p);
+    }
+
     document.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
