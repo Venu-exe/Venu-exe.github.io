@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Venuexe — Bug Bounty Hunter & Security Researcher</title>
+<meta name="description" content="Bug bounty hunter specializing in IDOR, authentication bypass, and access control vulnerabilities." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #050810;
+  --bg2: #0a0f1a;
+  --card: #0d1320;
+  --border: #1a2332;
+  --accent: #00ff88;
+  --accent2: #00d4ff;
+  --accent3: #ff3366;
+  --accent4: #ffaa00;
+  --text: #e6edf3;
+  --muted: #6b7a8d;
+  --code: #00ff88;
+  --glow: 0 0 20px rgba(0,255,136,0.3);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: #000; }
+
+/* Animated grid background */
+.grid-bg {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+  pointer-events: none;
+}
+.grid-bg::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.08) 0%, transparent 60%);
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Navigation */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(5,8,16,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  padding: 16px 0;
+  transition: all 0.3s;
+}
+nav.scrolled { background: rgba(5,8,16,0.95); }
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+.logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800; font-size: 1.3rem;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.logo::before {
+  content: '>';
+  color: var(--accent2);
+  font-weight: 400;
+}
+.logo span { color: var(--muted); font-weight: 400; }
+nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+nav a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.9rem; font-weight: 500;
+  transition: color 0.2s; position: relative;
+}
+nav a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px; background: var(--accent);
+  transition: width 0.3s;
+}
+nav a:hover { color: var(--accent); }
+nav a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--accent) !important; color: #000 !important;
+  padding: 10px 20px; border-radius: 8px;
+  font-weight: 600 !important;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: #00e07a !important; transform: translateY(-2px); }
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 140px 0 80px;
+  position: relative;
+}
+.hero-content { max-width: 800px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.2);
+  padding: 6px 14px; border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem; color: var(--accent);
+  margin-bottom: 24px;
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; background: var(--accent);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700; line-height: 1.05;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.hero h1 .gradient {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent2); font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+.hero .desc {
+  color: var(--muted); font-size: 1.15rem;
+  max-width: 600px; margin-bottom: 36px;
+  line-height: 1.7;
+}
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn {
+  padding: 14px 28px; border-radius: 10px;
+  font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; transition: all 0.3s;
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer; border: none;
+}
+.btn-primary {
+  background: var(--accent); color: #000;
+  box-shadow: 0 4px 20px rgba(0,255,136,0.3);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,255,136,0.5); }
+.btn-outline {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+
+/* Terminal window */
+.terminal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  margin-top: 60px;
+}
+.terminal-header {
+  background: var(--bg2); padding: 12px 16px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+.terminal-dot.r { background: #ff5f57; }
+.terminal-dot.y { background: #febc2e; }
+.terminal-dot.g { background: #28c840; }
+.terminal-title { color: var(--muted); font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; margin-left: 8px; }
+.terminal-body {
+  padding: 20px; font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem; line-height: 1.8;
+}
+.terminal-body .prompt { color: var(--accent); }
+.terminal-body .cmd { color: var(--text); }
+.terminal-body .output { color: var(--muted); }
+.terminal-body .success { color: var(--accent); }
+.terminal-body .highlight { color: var(--accent2); }
+
+/* Stats */
+.stats-section { padding: 80px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px 24px; text-align: center;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.stat-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.stat-card:hover::before { opacity: 1; }
+.stat-num {
+  font-size: 3rem; font-weight: 800;
+  font-family: 'JetBrains Mono', monospace;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* Section */
+section { padding: 100px 0; }
+.section-header { margin-bottom: 48px; }
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent); font-size: 0.85rem;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.section-tag::before { content: '//'; color: var(--muted); }
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700; line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.section-title .accent { color: var(--accent); }
+.section-desc { color: var(--muted); font-size: 1.05rem; max-width: 600px; margin-top: 12px; }
+
+/* Findings */
+.findings-grid { display: grid; gap: 24px; }
+.finding {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.finding::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  background: var(--accent); opacity: 0; transition: opacity 0.3s;
+}
+.finding:hover { border-color: rgba(0,255,136,0.3); transform: translateX(4px); }
+.finding:hover::before { opacity: 1; }
+.finding-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.finding-title { font-size: 1.25rem; font-weight: 600; flex: 1; }
+.badge {
+  padding: 5px 14px; border-radius: 20px;
+  font-size: 0.75rem; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+.badge-p2 { background: rgba(255,51,102,0.15); color: var(--accent3); border: 1px solid var(--accent3); }
+.badge-p3 { background: rgba(255,170,0,0.15); color: var(--accent4); border: 1px solid var(--accent4); }
+.badge-review { background: rgba(0,212,255,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
+.finding-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 16px; font-size: 0.85rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+.finding-meta span { display: flex; align-items: center; gap: 6px; }
+.finding-desc { color: var(--muted); margin-bottom: 20px; line-height: 1.7; }
+.finding-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.tag {
+  background: rgba(0,255,136,0.06); color: var(--accent);
+  padding: 4px 12px; border-radius: 6px;
+  font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;
+  border: 1px solid rgba(0,255,136,0.15);
+}
+.finding-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--accent); text-decoration: none;
+  font-weight: 600; font-size: 0.9rem;
+  transition: gap 0.2s;
+}
+.finding-link:hover { gap: 12px; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.skill-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  transition: all 0.3s;
+}
+.skill-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--glow); }
+.skill-icon { font-size: 2rem; margin-bottom: 12px; }
+.skill-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
+.skill-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.skill-tools { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.tool {
+  background: var(--bg2); color: var(--muted);
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 0.7rem; font-family: 'JetBrains Mono', monospace;
+  border: 1px solid var(--border);
+}
+
+/* Platforms */
+.platforms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.platform {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px; text-align: center;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.platform::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.3s;
+}
+.platform:hover { border-color: var(--accent); transform: translateY(-4px); }
+.platform:hover::before { opacity: 1; }
+.platform-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.platform .name { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+.platform .handle { color: var(--muted); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 16px; }
+.platform a {
+  color: var(--accent); text-decoration: none;
+  font-size: 0.85rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.platform a:hover { text-decoration: underline; }
+
+/* Contact */
+.contact-section { text-align: center; }
+.contact-grid { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 36px; }
+.contact-card {
+  background: var(--card); border: 1px solid var(--border);
+  padding: 20px 28px; border-radius: 12px;
+  text-decoration: none; color: var(--text);
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.3s; min-width: 180px;
+}
+.contact-card:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); box-shadow: var(--glow); }
+.contact-card .icon { font-size: 1.3rem; }
+.contact-card .label { font-weight: 600; font-size: 0.9rem; }
+.contact-card .sub { color: var(--muted); font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 0; text-align: center;
+  color: var(--muted); font-size: 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+footer .accent { color: var(--accent); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .platforms-grid { grid-template-columns: 1fr; }
+  nav ul { gap: 16px; }
+  nav ul li:nth-child(2), nav ul li:nth-child(3) { display: none; }
+  .hero h1 { font-size: 2.8rem; }
+}
+
+/* Scroll animations */
+.fade-in {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Glowing text */
+.glow { text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+</style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="container">
+      <a href="#" class="logo">venu<span>_exe</span></a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#findings">Findings</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#platforms">Platforms</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="about">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <div class="hero-badge"><span class="dot"></span> Available for collaboration</div>
+        <h1>Hi, I'm <span class="gradient">venuexee</span></h1>
+        <div class="subtitle">$ whoami → bug bounty hunter & security researcher</div>
+        <p class="desc">
+          I find vulnerabilities in web applications, APIs, and cloud infrastructure. 
+          Specialized in IDOR, authentication bypass, and broken access control. 
+          Active on HackerOne and Bugcrowd with multiple accepted findings.
+        </p>
+        <div class="hero-btns">
+          <a href="#findings" class="btn btn-primary">View Findings →</a>
+          <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="btn btn-outline">HackerOne Profile</a>
+        </div>
+      </div>
+
+      <div class="terminal fade-in" style="margin-top:60px;">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span>
+          <span class="terminal-dot y"></span>
+          <span class="terminal-dot g"></span>
+          <span class="terminal-title">venuexee@kali:~$</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$</span> <span class="cmd">cat profile.json</span></div>
+          <div class="output">{</div>
+          <div class="output">  <span class="highlight">"name"</span>: <span class="str">"venuexee"</span>,</div>
+          <div class="output">  <span class="highlight">"role"</span>: <span class="str">"Security Researcher"</span>,</div>
+          <div class="output">  <span class="highlight">"focus"</span>: [<span class="str">"IDOR"</span>, <span class="str">"Auth Bypass"</span>, <span class="str">"BAC"</span>, <span class="str">"GraphQL"</span>],</div>
+          <div class="output">  <span class="highlight">"platforms"</span>: [<span class="str">"HackerOne"</span>, <span class="str">"Bugcrowd"</span>],</div>
+          <div class="output">  <span class="highlight">"status"</span>: <span class="success">"hunting"</span>,</div>
+          <div class="output">  <span class="highlight">"currently_testing"</span>: [<span class="str">"SEEK"</span>, <span class="str">"Vinted"</span>, <span class="str">"Canada Goose"</span>]</div>
+          <div class="output">}</div>
+          <div><span class="prompt">$</span> <span class="cmd">_</span><span class="cursor" style="display:inline-block;width:8px;height:14px;background:var(--accent);animation:blink 1s infinite;"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card fade-in">
+          <div class="stat-num" data-target="6">0</div>
+          <div class="stat-label">Programs Tested</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-num" data-target="5">0</div>
+          <div class="stat-label">Reports Submitted</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-num" data-target="3">0</div>
+          <div class="stat-label">Findings Accepted</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-num" data-target="2">0</div>
+          <div class="stat-label">Platforms Active</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Findings -->
+  <section id="findings">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-tag">findings</div>
+        <h2 class="section-title">Featured <span class="accent">Vulnerabilities</span></h2>
+        <p class="section-desc">Real vulnerabilities discovered and reported through responsible disclosure.</p>
+      </div>
+
+      <div class="findings-grid">
+        <div class="finding fade-in">
+          <div class="finding-top">
+            <div class="finding-title">OTP Authentication Bypass via Replay of Verification Response</div>
+            <span class="badge badge-review">Under Review</span>
+          </div>
+          <div class="finding-meta">
+            <span>🏢 Canada Goose Inc.</span>
+            <span>📅 Oct 2026</span>
+            <span>🎯 HackerOne</span>
+            <span>🔒 Auth Bypass</span>
+          </div>
+          <p class="finding-desc">
+            The authentication flow is vulnerable to OTP verification bypass through replay of a previously successful verification response. An attacker can intercept a valid 200 OK response during a legitimate OTP submission, then replay it during a subsequent login attempt with an invalid OTP — completely bypassing the second factor of authentication.
+          </p>
+          <div class="finding-tags">
+            <span class="tag">Authentication Bypass</span>
+            <span class="tag">OTP Replay</span>
+            <span class="tag">Broken Access Control</span>
+            <span class="tag">Response Manipulation</span>
+          </div>
+          <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="finding-link">View on HackerOne →</a>
+        </div>
+
+        <div class="finding fade-in">
+          <div class="finding-top">
+            <div class="finding-title">IDOR on documentUploadFormData — S3 Upload Credential Exposure</div>
+            <span class="badge badge-p3">P3</span>
+          </div>
+          <div class="finding-meta">
+            <span>🏢 SEEK</span>
+            <span>📅 Oct 2026</span>
+            <span>🎯 Bugcrowd</span>
+            <span>🔒 IDOR</span>
+          </div>
+          <p class="finding-desc">
+            The <code>viewer.documentUploadFormData(id: UUID!)</code> GraphQL query generates S3 presigned upload credentials (including <code>X-Amz-Security-Token</code>) for any arbitrary UUID without verifying document ownership. Tested with all-zeros UUID — endpoint returned valid AWS credentials. Any authenticated user can generate upload credentials for any document ID.
+          </p>
+          <div class="finding-tags">
+            <span class="tag">IDOR</span>
+            <span class="tag">GraphQL</span>
+            <span class="tag">AWS S3</span>
+            <span class="tag">Credential Exposure</span>
+          </div>
+        </div>
+
+        <div class="finding fade-in">
+          <div class="finding-top">
+            <div class="finding-title">IDOR on /api/v2/users/{id} — User Profile Enumeration</div>
+            <span class="badge badge-review">Under Review</span>
+          </div>
+          <div class="finding-meta">
+            <span>🏢 Vinted</span>
+            <span>📅 Oct 2026</span>
+            <span>🎯 Bugcrowd</span>
+            <span>🔒 IDOR</span>
+          </div>
+          <p class="finding-desc">
+            The endpoint returns full user profile data for any user ID without authorization checks. Exposes internal identifiers (anon_id), moderator/admin flags, verification status, privacy settings, and business account linkage. Allows full user enumeration by iterating through IDs.
+          </p>
+          <div class="finding-tags">
+            <span class="tag">IDOR</span>
+            <span class="tag">User Enumeration</span>
+            <span class="tag">Information Disclosure</span>
+            <span class="tag">Privacy Violation</span>
+          </div>
+        </div>
+
+        <div class="finding fade-in">
+          <div class="finding-top">
+            <div class="finding-title">IDOR on seller_badges/achieved — Seller Badge Enumeration</div>
+            <span class="badge badge-review">Under Review</span>
+          </div>
+          <div class="finding-meta">
+            <span>🏢 Vinted</span>
+            <span>📅 Oct 2026</span>
+            <span>🎯 Bugcrowd</span>
+            <span>🔒 IDOR</span>
+          </div>
+          <p class="finding-desc">
+            The endpoint returns a seller's earned badges (e.g., ACTIVE_LISTER) for any sellerID value without verifying authorization. Any authenticated user can enumerate badge data for every seller on the platform by iterating the sellerID parameter.
+          </p>
+          <div class="finding-tags">
+            <span class="tag">IDOR</span>
+            <span class="tag">Enumeration</span>
+            <span class="tag">Access Control</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-tag">skills</div>
+        <h2 class="section-title">Technical <span class="accent">Arsenal</span></h2>
+        <p class="section-desc">Tools and methodologies I use for security research.</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🔍</div>
+          <h3>Web Application Testing</h3>
+          <p>Manual testing for OWASP Top 10, business logic flaws, access control issues, and authentication bypasses.</p>
+          <div class="skill-tools">
+            <span class="tool">Burp Suite Pro</span>
+            <span class="tool">OWASP ZAP</span>
+            <span class="tool">Manual Testing</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🔌</div>
+          <h3>API Security</h3>
+          <p>REST & GraphQL API testing for IDOR, BFLA, mass assignment, injection, and excessive data exposure.</p>
+          <div class="skill-tools">
+            <span class="tool">GraphQL</span>
+            <span class="tool">Postman</span>
+            <span class="tool">InQL</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🌐</div>
+          <h3>Reconnaissance</h3>
+          <p>Subdomain enumeration, endpoint discovery, attack surface mapping, and OSINT.</p>
+          <div class="skill-tools">
+            <span class="tool">Subfinder</span>
+            <span class="tool">httpx</span>
+            <span class="tool">Nuclei</span>
+            <span class="tool">Amass</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🔐</div>
+          <h3>Authentication Testing</h3>
+          <p>OTP bypass, session management, JWT analysis, OAuth/SSO flows, MFA bypass techniques.</p>
+          <div class="skill-tools">
+            <span class="tool">Burp Suite</span>
+            <span class="tool">JWT.io</span>
+            <span class="tool">Auth0</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">📱</div>
+          <h3>Mobile Security</h3>
+          <p>Android/iOS app testing — insecure storage, deep links, API abuse, and reverse engineering.</p>
+          <div class="skill-tools">
+            <span class="tool">MobSF</span>
+            <span class="tool">Frida</span>
+            <span class="tool">JADX</span>
+          </div>
+        </div>
+        <div class="skill-card fade-in">
+          <div class="skill-icon">☁️</div>
+          <h3>Cloud Security</h3>
+          <p>AWS S3 misconfigurations, IAM issues, and cloud infrastructure testing.</p>
+          <div class="skill-tools">
+            <span class="tool">AWS CLI</span>
+            <span class="tool">ScoutSuite</span>
+            <span class="tool">Prowler</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platforms -->
+  <section id="platforms">
+    <div class="container">
+      <div class="section-header fade-in">
+        <div class="section-tag">platforms</div>
+        <h2 class="section-title">Bug Bounty <span class="accent">Platforms</span></h2>
+        <p class="section-desc">Active on major platforms with proven track record.</p>
+      </div>
+      <div class="platforms-grid">
+        <div class="platform fade-in">
+          <div class="platform-icon">🎯</div>
+          <div class="name">HackerOne</div>
+          <div class="handle">@venuexee</div>
+          <a href="https://hackerone.com/venuexee?type=user" target="_blank">View Profile →</a>
+        </div>
+        <div class="platform fade-in">
+          <div class="platform-icon">🐛</div>
+          <div class="name">Bugcrowd</div>
+          <div class="handle">@venu-sh</div>
+          <a href="https://bugcrowd.com/venu-sh" target="_blank">View Profile →</a>
+        </div>
+        <div class="platform fade-in">
+          <div class="platform-icon">💻</div>
+          <div class="name">GitHub</div>
+          <div class="handle">venu-exe</div>
+          <a href="https://github.com/venu-exe" target="_blank">View Profile →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container contact-section">
+      <div class="section-header fade-in">
+        <div class="section-tag">contact</div>
+        <h2 class="section-title">Get In <span class="accent">Touch</span></h2>
+        <p class="section-desc" style="margin:0 auto 36px;">Open to collaboration, teaming, and security discussions.</p>
+      </div>
+      <div class="contact-grid fade-in">
+        <a href="https://hackerone.com/venuexee?type=user" target="_blank" class="contact-card">
+          <span class="icon">🔐</span>
+          <div><div class="label">HackerOne</div><div class="sub">@venuexee</div></div>
+        </a>
+        <a href="https://bugcrowd.com/venu-sh" target="_blank" class="contact-card">
+          <span class="icon">🐛</span>
+          <div><div class="label">Bugcrowd</div><div class="sub">@venu-sh</div></div>
+        </a>
+        <a href="https://github.com/venu-exe" target="_blank" class="contact-card">
+          <span class="icon">💻</span>
+          <div><div class="label">GitHub</div><div class="sub">venu-exe</div></div>
+        </a>
+        <a href="mailto:venu-sh@bugcrowdninja.com" class="contact-card">
+          <span class="icon">✉️</span>
+          <div><div class="label">Email</div><div class="sub">venu-sh@bugcrowdninja.com</div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 <span class="accent">venuexee</span> — Security Researcher & Bug Bounty Hunter</p>
+      <p style="margin-top:8px; opacity:0.6;">Built with ☕ and curiosity</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Intersection Observer for fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Animated counters
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.stat-num').forEach(el => {
+            const target = parseInt(el.dataset.target);
+            let current = 0;
+            const increment = target / 60;
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= target) {
+                el.textContent = target;
+                clearInterval(timer);
+              } else {
+                el.textContent = Math.floor(current);
+              }
+            }, 16);
+          });
+          counterObserver.disconnect();
+        }
+      });
+    });
+    counterObserver.observe(document.querySelector('.stats-section'));
+
+    // Typing effect for terminal
+    const cursor = document.querySelector('.terminal-body .cursor');
+    if (cursor) {
+      setInterval(() => {
+        cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+      }, 530);
+    }
+  </script>
+</body>
+</html>
